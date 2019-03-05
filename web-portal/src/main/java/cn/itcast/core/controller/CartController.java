@@ -74,7 +74,7 @@ public class CartController {
         List<BuyerCart> cookieCartList = JSON.parseArray(cookieValue, BuyerCart.class);
         //5. 判断用户是否登录, 未登录用户为"anonymousUser"
         if("anonymousUser".equals(username)){
-            //5.a. 未登录, 返回cookie中的购物车列表对象0..+ 
+            //5.a. 未登录, 返回cookie中的购物车列表对象0..+
             return cookieCartList;
         }else {
             //5.b.1.已登录, 从redis中获取购物车列表对象
