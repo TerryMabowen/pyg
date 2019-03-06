@@ -357,5 +357,5 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 //        map.put("totalPages",itemPages.getTotalPages());
 //        return map;
 //    }
-    //wjlwjlwjlwjl
+    //wjlwjlwjlwjlasdasd
 }
