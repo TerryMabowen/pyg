@@ -3,14 +3,22 @@ package cn.itcast.core.service.impl;
 import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
+import cn.itcast.core.dao.seller.SellerDao;
 import cn.itcast.core.pojo.cart.BuyerCart;
+import cn.itcast.core.pojo.entity.OrderDesc;
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderItemQuery;
+import cn.itcast.core.pojo.order.OrderQuery;
+import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.service.OrderService;
 import cn.itcast.core.util.Constants;
 import cn.itcast.core.util.IdWorker;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -36,6 +44,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private IdWorker idWorker;
+
+    @Autowired
+    private SellerDao sellerDao;
 
     @Override
     public void add(Order order) {
@@ -157,5 +168,38 @@ public class OrderServiceImpl implements OrderService {
                 redisTemplate.boundHashOps(Constants.REDIS_PAYLOG).delete(order.getUserId());
             }
         }
+    }
+
+    @Override
+    public OrderDesc findOrderDescByUsername(String username,String status){
+        OrderDesc orderDesc = new OrderDesc();
+
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria orderQueryCriteria = orderQuery.createCriteria();
+        orderQueryCriteria.andUserIdEqualTo(username);
+        if(status != null && !"".equals(status)) {
+            orderQueryCriteria.andStatusEqualTo(status);
+        }
+        List<Order> orderList = orderDao.selectByExample(orderQuery);
+
+        if(orderList != null){
+            orderDesc.setOrders(orderList);
+            for (Order order : orderList) {
+                String sellerId = order.getSellerId();
+                Seller seller = sellerDao.selectByPrimaryKey(sellerId);
+                String sellerName = seller.getName();
+                orderDesc.setSellerName(sellerName);
+
+                Long orderId = order.getOrderId();
+                OrderItemQuery orderItemQuery = new OrderItemQuery();
+                OrderItemQuery.Criteria criteria = orderItemQuery.createCriteria();
+                criteria.andOrderIdEqualTo(orderId);
+                List<OrderItem> orderItemList = orderItemDao.selectByExample(orderItemQuery);
+                if(orderItemList != null) {
+                    orderDesc.setOrderItems(orderItemList);
+                }
+            }
+        }
+        return orderDesc;
     }
 }
