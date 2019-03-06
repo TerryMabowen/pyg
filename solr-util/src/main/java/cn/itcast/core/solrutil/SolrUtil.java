@@ -42,7 +42,7 @@ public class SolrUtil {
 		solrTemplate.saveBeans(items);
 		solrTemplate.commit();
 	}
-	
+	//main方法
 	public static void main(String[] args) {
 		ApplicationContext context =  new ClassPathXmlApplicationContext("classpath*:spring/applicationContext*.xml");
 		SolrUtil solrUtil = (SolrUtil)context.getBean("solrUtil");
