@@ -7,4 +7,6 @@ import java.util.List;
 public interface SeckillGoodsService {
 
     public List<SeckillGoods> findList();
+
+    public SeckillGoods findOneFromRedis(Long id);
 }

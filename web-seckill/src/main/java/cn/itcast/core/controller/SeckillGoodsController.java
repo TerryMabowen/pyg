@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/seckillGoods")
 public class SeckillGoodsController {
 
-    @Reference
+    @Reference(timeout = 10000)
     private SeckillGoodsService seckillGoodsService;
 
     /**
@@ -24,5 +24,11 @@ public class SeckillGoodsController {
     public List<SeckillGoods> findList() {
         List<SeckillGoods> seckillGoodsList = seckillGoodsService.findList();
         return seckillGoodsList;
+    }
+
+    @RequestMapping("/findOneFromRedis")
+    public SeckillGoods findOneFromRedis(Long id) {
+        SeckillGoods seckillGoods = seckillGoodsService.findOneFromRedis(id);
+        return seckillGoods;
     }
 }
