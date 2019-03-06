@@ -68,7 +68,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public void add(GoodsEntity goodsEntity) {
-     //设置未申请状态
+        //设置未申请状态
         goodsEntity.getGoods().setAuditStatus("0");
         //添加商品基本信息
         goodsDao.insertSelective(goodsEntity.getGoods());
@@ -78,19 +78,19 @@ public class GoodsServiceImpl implements GoodsService {
         goodsDescDao.insertSelective(goodsEntity.getGoodsDesc());
         //添加库存集合对象
         List<Item> itemList = goodsEntity.getItemList();
-        if("1".equals(goodsEntity.getGoods().getIsEnableSpec())) {
+        if ("1".equals(goodsEntity.getGoods().getIsEnableSpec())) {
             //在添加商品的时候是否启用规格为勾选状态, 有规格, 有库存对象
             if (itemList != null) {
                 for (Item item : itemList) {
-                   //初始化库存对象的属性值
-                    setItemValues(goodsEntity,item);
+                    //初始化库存对象的属性值
+                    setItemValues(goodsEntity, item);
                     //库存标题, 通过 商品名称 + 规格=库存标题
                     //商品名称
                     String title = goodsEntity.getGoods().getGoodsName();
                     //获取规格json字符串
                     String specJsonStr = item.getSpec();
                     //解析成map, {"机身内存":"16G","网络":"联通3G"}
-                    Map<String,String> specMap = JSON.parseObject(specJsonStr, Map.class);
+                    Map<String, String> specMap = JSON.parseObject(specJsonStr, Map.class);
                     //获取规格value的集合
                     Collection<String> values = specMap.values();
                     for (String value : values) {
@@ -105,9 +105,9 @@ public class GoodsServiceImpl implements GoodsService {
         } else {
             //在添加商品的时候是否启用规格为未勾选状态, 没有规格, 没有库存对象
             //初始化库存对象的属性值
-           Item item = new Item();
+            Item item = new Item();
             //初始化库存对象的属性值
-            setItemValues(goodsEntity,item);
+            setItemValues(goodsEntity, item);
             //初始化商品名为库存标题
             item.setTitle(goodsEntity.getGoods().getGoodsName());
             //初始化价格
@@ -125,26 +125,26 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public PageResult search(Integer page, Integer rows, Goods goods) {
-        PageHelper.startPage(page,rows);
+        PageHelper.startPage(page, rows);
         GoodsQuery query = new GoodsQuery();
         GoodsQuery.Criteria criteria = query.createCriteria();
         //指定条件为未逻辑删除记录
         criteria.andIsDeleteIsNull();
-        if(goods != null){
-            if(goods.getAuditStatus() != null){
+        if (goods != null) {
+            if (goods.getAuditStatus() != null) {
                 //状态是通过复选框选择的,只需判断是否为空即可
                 criteria.andAuditStatusEqualTo(goods.getAuditStatus());
             }
-            if(goods.getGoodsName() != null && !"".equals(goods.getGoodsName().trim())){
+            if (goods.getGoodsName() != null && !"".equals(goods.getGoodsName().trim())) {
                 //前后去空格
-                criteria.andGoodsNameLike("%"+goods.getGoodsName().trim()+"%");
+                criteria.andGoodsNameLike("%" + goods.getGoodsName().trim() + "%");
             }
-            if(goods.getSellerId() != null && goods.getSellerId().length() > 0 && !"admin".equals(goods.getSellerId()) && !"wc".equals(goods.getSellerId())){
+            if (goods.getSellerId() != null && goods.getSellerId().length() > 0 && !"admin".equals(goods.getSellerId()) && !"wc".equals(goods.getSellerId())) {
                 criteria.andSellerIdEqualTo(goods.getSellerId());
             }
         }
         Page<Goods> goodList = (Page<Goods>) goodsDao.selectByExample(query);
-        return new PageResult(goodList.getTotal(),goodList.getResult());
+        return new PageResult(goodList.getTotal(), goodList.getResult());
     }
 
     @Override
@@ -173,20 +173,20 @@ public class GoodsServiceImpl implements GoodsService {
         itemDao.deleteByExample(query);
         //删除后保存修改的数据
         //首先判断是否启用了规格
-        if("1".equals(goodsEntity.getGoods().getIsEnableSpec())){
+        if ("1".equals(goodsEntity.getGoods().getIsEnableSpec())) {
             //启用
             List<Item> itemList = goodsEntity.getItemList();
-            if(itemList != null){
+            if (itemList != null) {
                 for (Item item : itemList) {
                     //初始化库存对象的属性值
-                    setItemValues(goodsEntity,item);
+                    setItemValues(goodsEntity, item);
                     //库存标题, 通过 商品名称 + 规格=库存标题
                     //商品名称
                     String title = goodsEntity.getGoods().getGoodsName();
                     //获取规格json字符串
                     String specJsonStr = item.getSpec();
                     //解析成map, {"机身内存":"16G","网络":"联通3G"}
-                    Map<String,String> specMap = JSON.parseObject(specJsonStr, Map.class);
+                    Map<String, String> specMap = JSON.parseObject(specJsonStr, Map.class);
                     //获取规格value的集合
                     Collection<String> values = specMap.values();
                     for (String value : values) {
@@ -198,12 +198,12 @@ public class GoodsServiceImpl implements GoodsService {
                     itemDao.insertSelective(item);
                 }
             }
-        }else{
+        } else {
             //不启用
             //初始化库存对象的属性值
             Item item = new Item();
             //初始化库存对象的属性值
-            setItemValues(goodsEntity,item);
+            setItemValues(goodsEntity, item);
             //初始化商品名为库存标题
             item.setTitle(goodsEntity.getGoods().getGoodsName());
             //初始化价格
@@ -218,12 +218,13 @@ public class GoodsServiceImpl implements GoodsService {
             itemDao.insertSelective(item);
         }
     }
+
     //删除(逻辑删除,并不是真的在数据库中删除,只是在页面上不显示)
     @Override
     public void delete(Long[] ids) {
         Goods goods = new Goods();
         goods.setIsDelete("1");
-        if(ids != null && ids.length > 0){
+        if (ids != null && ids.length > 0) {
             for (final Long id : ids) {
                 //根据商品id逻辑删除对应的商品信息
                 goods.setId(id);
@@ -243,7 +244,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public void updateStatus(Long[] ids, String status) {
-        if(ids != null && ids.length > 0) {
+        if (ids != null && ids.length > 0) {
             Goods goods = new Goods();
             Item item = new Item();
             for (final Long id : ids) {
@@ -251,13 +252,13 @@ public class GoodsServiceImpl implements GoodsService {
                 goods.setId(id);
                 goods.setAuditStatus(status);
                 goodsDao.updateByPrimaryKeySelective(goods);
-               //2. 更新库存表的商品状态
+                //2. 更新库存表的商品状态
                 item.setStatus(status);
                 ItemQuery query = new ItemQuery();
                 ItemQuery.Criteria criteria = query.createCriteria();
                 criteria.andGoodsIdEqualTo(id);
                 itemDao.updateByExampleSelective(item, query);
-                if("1".equals(status)) {
+                if ("1".equals(status)) {
                     //3. 将商品id作为消息发送到消息服务器上架队列上
                     //因为接收方为两个服务器(search和page)所以使用订阅发布模式
                     jmsTemplate.send(topicPageAndSolrDestination, new MessageCreator() {
@@ -274,7 +275,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     //初始化库存对象的值
-    private Item setItemValues(GoodsEntity goodsEntity,Item item){
+    private Item setItemValues(GoodsEntity goodsEntity, Item item) {
         //品牌名称
         Brand brand = brandDao.selectByPrimaryKey(goodsEntity.getGoods().getBrandId());
         item.setBrand(brand.getName());
