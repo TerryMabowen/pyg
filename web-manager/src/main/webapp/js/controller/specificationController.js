@@ -95,4 +95,17 @@ app.controller('specificationController',function ($scope,specificationService,$
     $scope.deleteTableRow = function(index){
         $scope.entity.specificationOptionList.splice(index,1);
     }
+    // 显示状态
+    $scope.status = ["未申请","未审核","审核通过","已驳回"];
+    // 审核的方法:
+    $scope.updateStatus = function(status){
+        specificationService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.success){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];//清空id集合
+            }else{
+                alert(response.message);
+            }
+        });
+    }
 })
