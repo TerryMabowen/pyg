@@ -26,6 +26,12 @@ public class SeckillGoodsController {
         return seckillGoodsList;
     }
 
+    /**
+     * 根据id从redis中查询商品
+     *
+     * @param id 秒杀商品id
+     * @return 秒杀商品
+     */
     @RequestMapping("/findOneFromRedis")
     public SeckillGoods findOneFromRedis(Long id) {
         SeckillGoods seckillGoods = seckillGoodsService.findOneFromRedis(id);

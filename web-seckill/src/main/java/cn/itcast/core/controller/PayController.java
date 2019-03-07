@@ -2,8 +2,10 @@ package cn.itcast.core.controller;
 
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.log.PayLog;
+import cn.itcast.core.pojo.seckill.SeckillOrder;
 import cn.itcast.core.service.OrderService;
 import cn.itcast.core.service.PayService;
+import cn.itcast.core.service.SeckillOrderService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,18 +22,20 @@ public class PayController {
     private PayService payService;
 
     @Reference
-    private OrderService orderService;
+    private SeckillOrderService seckillOrderService;
 
     @RequestMapping("/createNative")
     public Map<String, String> createNative() {
         //获取当前登陆用户的用户名
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         //通过用户名到Redis中查询订单信息
-        PayLog payLog = payService.findPayLogByUsername(username);
+        SeckillOrder seckillOrder = payService.searchOrderFromRedisByUsername(username);
         //调用微信支付统一下单接口生成支付链接
-        if (payLog != null) {
+        if (seckillOrder != null) {
             //Map map = payService.createNative(payLog.getOutTradeNo(), String.valueOf(payLog.getTotalFee()));
-            Map<String, String> map = payService.createNative(payLog.getOutTradeNo(), "1");
+            //Map<String, String> map = payService.createNative(seckillOrder.getId()+"", "1");
+            long fen = (long) (seckillOrder.getMoney().doubleValue() * 100);//金额（分）
+            Map<String, String> map = payService.createNative(seckillOrder.getId() + "", fen + "");
             return map;
         } else {
             return new HashMap<>();
@@ -40,8 +44,10 @@ public class PayController {
 
     @RequestMapping("/queryPayStatus")
     public Result queryPayStatus(String out_trade_no) {
+        //获取当前用户
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         Result result = null;
-        int flag = 1;
+        int flag = 0;
         //1. 死循环, 不停的查
         while (true) {
             //2. 根据支付单号调用微信查询订单接口
@@ -53,8 +59,8 @@ public class PayController {
             }
             //4. 如果查询支付成功(查看微信支付平台返回的信息中trade_state的值是什么,是SUCCESS表示支付成功)
             if ("SUCCESS".equals(map.get("trade_state"))) {
-                //5. 修改支付日志表和订单表支付状态为支付成功, 删除redis中缓存的待支付日志对象
-                orderService.updateStatusToPayLogAndOrder(out_trade_no);
+                //5. 将redis中的订单保存至数据库,并清除缓存中的订单
+                seckillOrderService.saveOrderFromRedisToDb(userId, Long.valueOf(out_trade_no), map.get("transaction_id"));
                 result = new Result(true, "支付成功!");
                 break;
             }
@@ -62,8 +68,20 @@ public class PayController {
             try {
                 Thread.sleep(3000);
                 flag++;
-                if (flag >= 200) {
+                if (flag > 100) {
                     result = new Result(false, "支付超时!");
+                    Map<String, String> payresult = payService.closePay(out_trade_no);
+                    if (!"SUCCESS".equals(payresult.get("result_code"))) {//如果返回结果是正常关闭
+                        if ("ORDERPAID".equals(payresult.get("err_code"))) {
+                            result = new Result(true, "支付成功");
+                            seckillOrderService.saveOrderFromRedisToDb(userId, Long.valueOf(out_trade_no), map.get("transaction_id"));
+                        }
+                    }
+                    if (result.isSuccess() == false) {
+                        //System.out.println("超时，取消订单");
+                        //2.调用删除
+                        seckillOrderService.deleteOrderFromRedis(userId, Long.valueOf(out_trade_no));
+                    }
                     break;
                 }
             } catch (InterruptedException e) {
