@@ -46,6 +46,21 @@ app.controller('itemCatController',function ($scope,itemCatService,$controller) 
         )
     }*/
 
+
+    //上传excel表格解析
+    $scope.uploadExcel = function () {
+        // 调用uploadService的方法完成文件的上传
+        itemCatService.uploadExcel().success(function (response) {
+            if (response.success == true) {
+                alert(response.message)
+                $scope.reloadList();//重新加载
+            } else {
+                alert(response.message);
+            }
+        });
+    }
+
+
     //保存
     $scope.save=function () {
         //方法名称

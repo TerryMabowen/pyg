@@ -76,4 +76,6 @@ public class BrandServiceImpl implements BrandService {
         List<Map> maps = brandDao.selectOptionList();
         return maps;
     }
+
+
 }

@@ -187,4 +187,10 @@
   <select id="selectOptionList" resultType="java.util.Map">
     select id,name as text from tb_brand
   </select>
+
+  <!--根据excel表传入的name查询到对应的信息 以Map形式返回-->
+  <select id="selectOptionListByName" resultType="java.util.Map">
+    select id,name as text from tb_brand where name =#{name,jdbcType=VARCHAR}
+  </select>
+
 </mapper>
