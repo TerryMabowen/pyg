@@ -31,7 +31,7 @@
 
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="findItemCatList()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="findItemCatList(),findGoodsForUpShelf()">
   <!-- .box-body -->
                 
                     <div class="box-header with-border">
@@ -47,10 +47,7 @@
                             <div class="pull-left">
                                 <div class="form-group form-inline">
                                     <div class="btn-group">
-                                        <a href="goods_edit.html"  class="btn btn-default">新建</a>
-                                        <button ng-click="dele()" type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>
-                                        <button type="button" class="btn btn-default" title="提交审核" ><i class="fa fa-check"></i> 提交审核</button>
-                                        <button type="button" class="btn btn-default" title="屏蔽" onclick='confirm("你确认要屏蔽吗？")'><i class="fa fa-ban"></i> 屏蔽</button>
+                                        <button ng-click="upShelf()" type="button"  class="btn btn-default" title="上架"><i class="fa fa-refresh"></i> 上架</button>
                                         <button type="button"  class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
 
                                     </div>
@@ -114,7 +111,7 @@
                         </div>
                         <!-- 数据表格 /-->
                         <!-- 分页 -->
-						<tm-pagination conf="paginationConf"></tm-pagination>
+						<!--<tm-pagination conf="paginationConf"></tm-pagination>-->
                         
                      </div>
                     <!-- /.box-body -->

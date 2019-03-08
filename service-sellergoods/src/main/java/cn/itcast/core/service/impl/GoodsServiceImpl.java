@@ -21,6 +21,7 @@ import com.github.pagehelper.PageHelper;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,10 +62,22 @@ public class GoodsServiceImpl implements GoodsService {
     private JmsTemplate jmsTemplate;
 
     @Autowired
+    @Qualifier("topicPageAndSolrDestination")
     private ActiveMQTopic topicPageAndSolrDestination;
 
+    //上架发布订阅
     @Autowired
+    @Qualifier("topicPageAndSolrDestination2")
+    private ActiveMQTopic topicPageAndSolrDestination2;
+
+    @Autowired
+    @Qualifier("queueSolrDeleteDestination")
     private ActiveMQQueue queueSolrDeleteDestination;
+
+    //下架点对点
+    @Autowired
+    @Qualifier("queueSolrDeleteDestination2")
+    private ActiveMQQueue queueSolrDeleteDestination2;
 
     @Override
     public void add(GoodsEntity goodsEntity) {
@@ -131,7 +144,7 @@ public class GoodsServiceImpl implements GoodsService {
         //指定条件为未逻辑删除记录
         criteria.andIsDeleteIsNull();
         if (goods != null) {
-            if (goods.getAuditStatus() != null) {
+            if (goods.getAuditStatus() != null && !"".equals(goods.getAuditStatus())) {
                 //状态是通过复选框选择的,只需判断是否为空即可
                 criteria.andAuditStatusEqualTo(goods.getAuditStatus());
             }
@@ -240,6 +253,46 @@ public class GoodsServiceImpl implements GoodsService {
                 });
             }
         }
+    }
+
+    //上架
+    @Override
+    public void upShelf(Long[] ids) {
+        if (ids != null && ids.length > 0) {
+            for (Long id : ids) {
+
+            }
+        }
+    }
+
+    //下架
+    @Override
+    public void downShelf(Long[] ids) {
+        if (ids != null && ids.length > 0) {
+            for (Long id : ids) {
+
+            }
+        }
+    }
+
+    //上架功能查询商品列表
+    @Override
+    public List<Goods> findGoodsForUpShelf() {
+        GoodsQuery goodsQuery = new GoodsQuery();
+        GoodsQuery.Criteria criteria = goodsQuery.createCriteria();
+        criteria.andAuditStatusEqualTo("1");
+        List<Goods> goodsList = goodsDao.selectByExample(goodsQuery);
+        return goodsList;
+    }
+
+    //下架功能查询商品列表
+    @Override
+    public List<Goods> findGoodsForDownShelf() {
+        GoodsQuery goodsQuery = new GoodsQuery();
+        GoodsQuery.Criteria criteria = goodsQuery.createCriteria();
+        criteria.andIsMarketableEqualTo("1");
+        List<Goods> goodsList = goodsDao.selectByExample(goodsQuery);
+        return goodsList;
     }
 
     @Override
