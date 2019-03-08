@@ -7,7 +7,9 @@ import cn.itcast.core.service.SeckillGoodsService;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,4 +65,47 @@ public class SeckillGoodsServiceImpl implements SeckillGoodsService {
         SeckillGoods seckillGoods = (SeckillGoods) redisTemplate.boundHashOps("seckillGoods").get(id);
         return seckillGoods;
     }
+
+    /**
+     * 每分钟查询数据库，将符合条件并且缓存中不存在的秒杀商品存入缓存
+     */
+    @Scheduled(cron = "0 * * * * ?")
+    public void refreshSeckillGoods() {
+        //查询缓存中在售商品的id集合
+        List seckillGoodsIds = new ArrayList<>(redisTemplate.boundHashOps("seckillGoods").keys());
+        SeckillGoodsQuery query = new SeckillGoodsQuery();
+        SeckillGoodsQuery.Criteria criteria = query.createCriteria();
+        criteria.andStatusEqualTo("1");
+        criteria.andStockCountGreaterThan(0);
+        criteria.andStartTimeLessThanOrEqualTo(new Date());
+        criteria.andEndTimeGreaterThan(new Date());
+        //排除缓存中已有的商品
+        criteria.andIdNotIn(seckillGoodsIds);
+        //从数据库中查符合条件的秒杀商品
+        List<SeckillGoods> seckillGoodsList = seckillGoodsDao.selectByExample(query);
+        if (seckillGoodsList != null) {
+            for (SeckillGoods seckillGoods : seckillGoodsList) {
+                //存入缓存
+                redisTemplate.boundHashOps("seckillGoods").put(seckillGoods.getId(), seckillGoods);
+            }
+        }
+    }
+
+    /**
+     * 移除缓存中过期的秒杀商品
+     */
+    @Scheduled(cron = "* * * * * ?")
+    public void removeSeckillGoods() {
+        //查询缓存中商品集合
+        List<SeckillGoods> seckillGoodsList = redisTemplate.boundHashOps("seckillGoods").values();
+        if (seckillGoodsList != null) {
+            for (SeckillGoods seckillGoods : seckillGoodsList) {
+                if (seckillGoods.getEndTime().getTime() < new Date().getTime()) {
+                    seckillGoodsDao.updateByPrimaryKeySelective(seckillGoods);
+                    redisTemplate.boundHashOps("seckillGoods").delete(seckillGoods.getId());
+                }
+            }
+        }
+    }
+
 }
