@@ -119,7 +119,7 @@ app.controller('goodsController', function ($scope, $controller, $location, type
         goodsService.upShelf($scope.selectIds).success(
             function (response) {
                 if (response.success) {
-                    $scope.reloadList();//刷新列表
+                    window.location.reload();//刷新列表
                     $scope.selectIds = [];
                 } else {
                     alert(response.message);
@@ -144,7 +144,7 @@ app.controller('goodsController', function ($scope, $controller, $location, type
         goodsService.downShelf($scope.selectIds).success(
             function (response) {
                 if (response.success) {
-                    $scope.reloadList();//刷新列表
+                    window.location.reload();//刷新列表
                     $scope.selectIds = [];
                 } else {
                     alert(response.message);

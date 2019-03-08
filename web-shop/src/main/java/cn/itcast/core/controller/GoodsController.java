@@ -84,13 +84,15 @@ public class GoodsController {
 
     @RequestMapping("/findGoodsForUpShelf")
     public List<Goods> findGoodsForUpShelf() {
-        List<Goods> goodsList = goodsService.findGoodsForUpShelf();
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<Goods> goodsList = goodsService.findGoodsForUpShelf(sellerId);
         return goodsList;
     }
 
     @RequestMapping("/findGoodsForDownShelf")
     public List<Goods> findGoodsForDownShelf() {
-        List<Goods> goodsList = goodsService.findGoodsForDownShelf();
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<Goods> goodsList = goodsService.findGoodsForDownShelf(sellerId);
         return goodsList;
     }
 

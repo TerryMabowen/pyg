@@ -32,10 +32,10 @@ public interface GoodsService {
     void downShelf(Long[] ids);
 
     //上架功能查询商品列表
-    public List<Goods> findGoodsForUpShelf();
+    public List<Goods> findGoodsForUpShelf(String sellerId);
 
     //下架功能查询商品列表
-    public List<Goods> findGoodsForDownShelf();
+    public List<Goods> findGoodsForDownShelf(String sellerId);
 
     //批量修改状态
     void updateStatus(Long[] ids, String status);

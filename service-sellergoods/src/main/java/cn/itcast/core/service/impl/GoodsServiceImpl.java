@@ -258,9 +258,19 @@ public class GoodsServiceImpl implements GoodsService {
     //上架
     @Override
     public void upShelf(Long[] ids) {
-        if (ids != null && ids.length > 0) {
-            for (Long id : ids) {
-
+        if (ids != null) {
+            for (final Long id : ids) {
+                Goods goods = new Goods();
+                goods.setId(id);
+                goods.setIsMarketable("1");
+                goodsDao.updateByPrimaryKeySelective(goods);
+                jmsTemplate.send(topicPageAndSolrDestination2, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        TextMessage textMessage = session.createTextMessage(String.valueOf(id));
+                        return textMessage;
+                    }
+                });
             }
         }
     }
@@ -268,29 +278,49 @@ public class GoodsServiceImpl implements GoodsService {
     //下架
     @Override
     public void downShelf(Long[] ids) {
-        if (ids != null && ids.length > 0) {
-            for (Long id : ids) {
-
+        if (ids != null) {
+            for (final Long id : ids) {
+                Goods goods = new Goods();
+                goods.setId(id);
+                goods.setIsMarketable("0");
+                goodsDao.updateByPrimaryKeySelective(goods);
+                jmsTemplate.send(queueSolrDeleteDestination2, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        TextMessage textMessage = session.createTextMessage(String.valueOf(id));
+                        return textMessage;
+                    }
+                });
             }
         }
     }
 
     //上架功能查询商品列表
     @Override
-    public List<Goods> findGoodsForUpShelf() {
+    public List<Goods> findGoodsForUpShelf(String sellerId) {
         GoodsQuery goodsQuery = new GoodsQuery();
         GoodsQuery.Criteria criteria = goodsQuery.createCriteria();
         criteria.andAuditStatusEqualTo("1");
+        criteria.andSellerIdEqualTo(sellerId);
+        criteria.andIsMarketableEqualTo("0");
+
+        GoodsQuery.Criteria criteria1 = goodsQuery.createCriteria();
+        criteria1.andAuditStatusEqualTo("1");
+        criteria1.andSellerIdEqualTo(sellerId);
+        criteria1.andIsMarketableIsNull();
+        goodsQuery.or(criteria1);
+
         List<Goods> goodsList = goodsDao.selectByExample(goodsQuery);
         return goodsList;
     }
 
     //下架功能查询商品列表
     @Override
-    public List<Goods> findGoodsForDownShelf() {
+    public List<Goods> findGoodsForDownShelf(String sellerId) {
         GoodsQuery goodsQuery = new GoodsQuery();
         GoodsQuery.Criteria criteria = goodsQuery.createCriteria();
         criteria.andIsMarketableEqualTo("1");
+        criteria.andSellerIdEqualTo(sellerId);
         List<Goods> goodsList = goodsDao.selectByExample(goodsQuery);
         return goodsList;
     }

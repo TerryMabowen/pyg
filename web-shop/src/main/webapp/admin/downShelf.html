@@ -31,7 +31,7 @@
 
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="findItemCatList(),findGoodsForDownShelf()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="findItemCatList();findGoodsForDownShelf()">
   <!-- .box-body -->
                 
                     <div class="box-header with-border">
@@ -53,7 +53,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="box-tools pull-right">
+                            <!--<div class="box-tools pull-right">
                                 <div class="has-feedback">
                                   		状态：<select ng-model="searchEntity.auditStatus">
                                          	<option value="">全部</option>      
@@ -65,7 +65,7 @@
 							                  商品名称：<input type="text" ng-model="searchEntity.goodsName">									
 									<button class="btn btn-default" ng-click="reloadList()">查询</button>                                    
                                 </div>
-                            </div>
+                            </div>-->
                             <!--工具栏/-->
 
 			                  <!--数据列表-->
@@ -82,7 +82,7 @@
 									      <th class="sorting">二级分类</th>
 									      <th class="sorting">三级分类</th>
 									      <th class="sorting">状态</th>									     						
-					                      <th class="text-center">操作</th>
+					                      <!--<th class="text-center">操作</th>-->
 			                          </tr>
 			                      </thead>
 			                      <tbody>
@@ -99,9 +99,9 @@
 		                                  		{{status[entity.auditStatus]}}
 		                                  	</span>
 		                                  </td>		                                  
-		                                  <td class="text-center">
+		                                  <!--<td class="text-center">
 		                                  	  <a class="btn bg-olive btn-xs" href="goods_edit.html#?id={{entity.id}}">修改</a>                                
-		                                  </td>
+		                                  </td>-->
 			                          </tr>
 			                      </tbody>
 			                  </table>

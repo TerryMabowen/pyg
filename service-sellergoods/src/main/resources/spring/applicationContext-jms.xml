@@ -30,14 +30,15 @@
 	<bean id="topicPageAndSolrDestination" class="org.apache.activemq.command.ActiveMQTopic">
 		<constructor-arg value="pinyougou_topic_page_solr"/>
 	</bean>
-	<bean id="topicPageAndSolrDestination2" class="org.apache.activemq.command.ActiveMQTopic">
-		<constructor-arg value="pinyougou_topic_page_solr2"/>
-	</bean>
-
 
 	<!-- 点对点模式，删除索引库-->
 	<bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">
 		<constructor-arg value="pinyougou_queue_solr_delete"/>
+	</bean>
+
+	<!-- 这俩是上架下架功能的队列-->
+	<bean id="topicPageAndSolrDestination2" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg value="pinyougou_topic_page_solr2"/>
 	</bean>
 	<bean id="queueSolrDeleteDestination2" class="org.apache.activemq.command.ActiveMQQueue">
 		<constructor-arg value="pinyougou_queue_solr_delete2"/>
