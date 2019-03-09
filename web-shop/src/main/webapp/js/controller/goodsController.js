@@ -103,6 +103,56 @@ app.controller('goodsController', function ($scope, $controller, $location, type
         );
     }
 
+    //上架功能查询商品列表
+    $scope.findGoodsForUpShelf = function () {
+        $scope.selectIds = [];
+        goodsService.findGoodsForUpShelf().success(
+            function (response) {
+                $scope.list = response;
+            }
+        );
+    }
+
+    //上架商品
+    $scope.upShelf = function () {
+        //获取选中的复选框
+        goodsService.upShelf($scope.selectIds).success(
+            function (response) {
+                if (response.success) {
+                    window.location.reload();//刷新列表
+                    $scope.selectIds = [];
+                } else {
+                    alert(response.message);
+                }
+            }
+        );
+    }
+
+    //下架功能查询商品列表
+    $scope.findGoodsForDownShelf = function () {
+        $scope.selectIds = [];
+        goodsService.findGoodsForDownShelf().success(
+            function (response) {
+                $scope.list = response;
+            }
+        );
+    }
+
+    //下架商品
+    $scope.downShelf = function () {
+        //获取选中的复选框
+        goodsService.downShelf($scope.selectIds).success(
+            function (response) {
+                if (response.success) {
+                    window.location.reload();//刷新列表
+                    $scope.selectIds = [];
+                } else {
+                    alert(response.message);
+                }
+            }
+        );
+    }
+
     $scope.searchEntity = {};//定义搜索对象
 
     //搜索
@@ -249,6 +299,7 @@ app.controller('goodsController', function ($scope, $controller, $location, type
     $scope.itemCatList = [];
     // 显示分类:
     $scope.findItemCatList = function () {
+        $scope.selectIds = [];
         itemCatService.findAll().success(function (response) {
             for (var i = 0; i < response.length; i++) {
                 $scope.itemCatList[response[i].id] = response[i].name;
