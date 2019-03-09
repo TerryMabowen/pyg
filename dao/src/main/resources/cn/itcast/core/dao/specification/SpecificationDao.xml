@@ -187,4 +187,9 @@
   <select id="selectOptionList" resultType="java.util.Map">
     select id, spec_name text from tb_specification
   </select>
+
+  <!--获取规格列表封装成Map对象返回-->
+  <select id="selectOptionListBySpecName" resultType="java.util.Map">
+    select id,spec_name as text from tb_specification WHERE spec_name=#{specName,jdbcType=VARCHAR}
+  </select>
 </mapper>
