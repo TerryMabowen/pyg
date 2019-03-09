@@ -69,7 +69,7 @@ app.controller('seckill_orderController', function ($scope, $controller, $locati
         );
     }
 
-
+    $scope.searchEntity = {};
     //搜索
     $scope.search = function (page, rows) {
         seckill_orderService.search(page, rows, $scope.searchEntity).success(

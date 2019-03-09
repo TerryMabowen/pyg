@@ -31,13 +31,17 @@ public class Seckill_orderServiceImpl implements Seckill_orderService {
         SeckillOrderQuery.Criteria criteria = query.createCriteria();
 
         if (seckillOrder != null) {
+            if (seckillOrder.getId()!= null&&!"".equals(seckillOrder.getId())) {
+                //状态是通过复选框选择的,只需判断是否为空即可
+                criteria.andIdEqualTo(seckillOrder.getId());
+            }
             if (seckillOrder.getStatus() != null) {
                 //状态是通过复选框选择的,只需判断是否为空即可
                 criteria.andStatusEqualTo(seckillOrder.getStatus());
             }
-            if (seckillOrder.getSeckillId() != null && !"".equals(seckillOrder.getSeckillId())) {
+            if (seckillOrder.getSellerId() != null && !"".equals(seckillOrder.getSellerId())){
                 //前后去空格
-                criteria.andSeckillIdNotEqualTo(seckillOrder.getSeckillId());
+                criteria.andSeckillIdEqualTo(seckillOrder.getSeckillId());
             }
         }
         Page<SeckillOrder> SeckillOrderList = (Page<SeckillOrder>) seckillOrderDao.selectByExample(query);

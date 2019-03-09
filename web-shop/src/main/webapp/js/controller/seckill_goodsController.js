@@ -71,9 +71,9 @@ app.controller('seckill_goodsController', function ($scope, $controller, $locati
     }
 
 
+    $scope.searchEntity={};
     //搜索
     $scope.search = function (page, rows) {
-        alert("111");
         seckill_goodsService.search(page, rows, $scope.searchEntity).success(
             function (response) {
                 $scope.list = response.rows;
@@ -109,6 +109,6 @@ app.controller('seckill_goodsController', function ($scope, $controller, $locati
 
 
     // 显示状态 0-已申请 1-审核通过 2-审核未通过 3-未申请
-    $scope.status = ["已申请", "审核通过", "审核未通过", "未申请"];
+    $scope.status1 = ["已申请", "审核通过", "审核未通过", "未申请"];
 
 });	

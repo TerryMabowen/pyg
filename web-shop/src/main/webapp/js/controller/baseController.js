@@ -7,13 +7,11 @@ app.controller("baseController", function ($scope) {
         perPageOptions: [20, 30, 40, 50, 100],// 显示多少条下拉列表
 
         onChange: function () { // 当页码、每页显示多少条下拉列表发生变化的时候，自动触发了
-            alert("111");
             $scope.reloadList();// 重新加载列表
         }
     };
 
     $scope.reloadList = function () {
-        alert("1111");
         // $scope.findByPage($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage);
         $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
     }

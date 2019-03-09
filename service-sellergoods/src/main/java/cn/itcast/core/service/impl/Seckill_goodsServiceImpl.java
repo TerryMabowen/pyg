@@ -57,6 +57,10 @@ public class Seckill_goodsServiceImpl implements Seckill_goodsService {
         SeckillGoodsQuery.Criteria criteria = query.createCriteria();
 
         if (seckillGoods != null) {
+            if (seckillGoods.getSellerId() != null && !"".equals(seckillGoods.getSellerId().trim())) {
+                //前后去空格
+                criteria.andSellerIdLike("%" + seckillGoods.getSellerId().trim() + "%");
+            }
             if (seckillGoods.getStatus() != null) {
                 //状态是通过复选框选择的,只需判断是否为空即可
                 criteria.andStatusEqualTo(seckillGoods.getStatus());
