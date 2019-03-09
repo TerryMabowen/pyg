@@ -1,10 +1,13 @@
 package cn.itcast.core.service.impl;
 
 import cn.itcast.core.dao.seckill.SeckillGoodsDao;
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.pojo.seckill.SeckillGoodsQuery;
 import cn.itcast.core.service.SeckillGoodsService;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -104,6 +107,35 @@ public class SeckillGoodsServiceImpl implements SeckillGoodsService {
                     seckillGoodsDao.updateByPrimaryKeySelective(seckillGoods);
                     redisTemplate.boundHashOps("seckillGoods").delete(seckillGoods.getId());
                 }
+            }
+        }
+    }
+
+    @Override
+    public PageResult search(Integer page, Integer rows, SeckillGoods seckillGoods) {
+        SeckillGoodsQuery seckillGoodsQuery = new SeckillGoodsQuery();
+        SeckillGoodsQuery.Criteria criteria = seckillGoodsQuery.createCriteria();
+        if(seckillGoods!=null){
+            if(seckillGoods.getTitle()!=null&&seckillGoods.getTitle().length()>0){
+                criteria.andTitleLike(seckillGoods.getTitle());
+            }
+            if(seckillGoods.getStatus()!=null){
+                criteria.andStatusEqualTo(seckillGoods.getStatus());
+            }
+        }
+        PageHelper.startPage(page,rows);
+        Page<SeckillGoods> seckillGoodsPage = (Page<SeckillGoods>) seckillGoodsDao.selectByExample(seckillGoodsQuery);
+        return new PageResult(seckillGoodsPage.getTotal(),seckillGoodsPage.getResult());
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        if(ids!=null&&ids.length>0){
+            for (Long id : ids) {
+                SeckillGoods seckillGoods = new SeckillGoods();
+                seckillGoods.setGoodsId(id);
+                seckillGoods.setStatus(status);
+                seckillGoodsDao.updateByPrimaryKeySelective(seckillGoods);
             }
         }
     }

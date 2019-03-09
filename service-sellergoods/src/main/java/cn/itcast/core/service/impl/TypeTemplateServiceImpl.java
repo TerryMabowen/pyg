@@ -158,7 +158,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             for (Long id : ids) {
                 TypeTemplate typeTemplate = new TypeTemplate();
                 typeTemplate.setId(id);
-                typeTemplate.setStat("1");
+                typeTemplate.setStat(status);
                 typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
             }
         }
