@@ -15,6 +15,8 @@ public class Brand implements Serializable {
      */
     private String firstChar;
 
+    private String stat;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -41,6 +43,14 @@ public class Brand implements Serializable {
         this.firstChar = firstChar == null ? null : firstChar.trim();
     }
 
+    public String getStat() {
+        return stat;
+    }
+
+    public void setStat(String stat) {
+        this.stat = stat == null ? null : stat.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -50,6 +60,7 @@ public class Brand implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", firstChar=").append(firstChar);
+        sb.append(", stat=").append(stat);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -69,7 +80,8 @@ public class Brand implements Serializable {
         Brand other = (Brand) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getFirstChar() == null ? other.getFirstChar() == null : this.getFirstChar().equals(other.getFirstChar()));
+            && (this.getFirstChar() == null ? other.getFirstChar() == null : this.getFirstChar().equals(other.getFirstChar()))
+            && (this.getStat() == null ? other.getStat() == null : this.getStat().equals(other.getStat()));
     }
 
     @Override
@@ -79,6 +91,7 @@ public class Brand implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getFirstChar() == null) ? 0 : getFirstChar().hashCode());
+        result = prime * result + ((getStat() == null) ? 0 : getStat().hashCode());
         return result;
     }
 }

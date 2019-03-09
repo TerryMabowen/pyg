@@ -20,6 +20,19 @@ app.controller('specificationController',function ($scope,specificationService,$
         )
     }*/
 
+    //上传excel表格解析
+    $scope.uploadExcel = function () {
+        // 调用uploadService的方法完成文件的上传
+        specificationService.uploadExcel().success(function (response) {
+            if (response.success == true) {
+                alert(response.message)
+                $scope.reloadList();//重新加载
+            } else {
+                alert(response.message);
+            }
+        });
+    }
+
     //保存
     $scope.save=function () {
         //方法名称
@@ -94,5 +107,18 @@ app.controller('specificationController',function ($scope,specificationService,$
     //删除选项行
     $scope.deleteTableRow = function(index){
         $scope.entity.specificationOptionList.splice(index,1);
+    }
+    // 显示状态
+    $scope.status = ["未申请","未审核","审核通过","已驳回"];
+    // 审核的方法:
+    $scope.updateStatus = function(status){
+        specificationService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.success){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];//清空id集合
+            }else{
+                alert(response.message);
+            }
+        });
     }
 })

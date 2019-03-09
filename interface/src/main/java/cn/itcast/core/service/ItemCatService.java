@@ -21,9 +21,12 @@ public interface ItemCatService {
     //批量删除
     void delete(Long[] ids);
     //多条件分页查询
-    //PageResult search(Integer page, Integer rows, ItemCat itemCat);
+    PageResult search(Integer page, Integer rows, ItemCat itemCat);
     //根据上级ID查询商品分类列表
     List<ItemCat> findByParentId(Long parentId);
 
     List<ItemCat> selectByParentId(Long parentId);
+
+    //修改状态
+    void updateStatus(Long [] ids, String status);
 }

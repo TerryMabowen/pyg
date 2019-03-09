@@ -31,7 +31,7 @@
   	<!-- CAS入口点 开始 -->
     <beans:bean id="casProcessingFilterEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">  
         <!-- 单点登录服务器登录URL -->  
-        <beans:property name="loginUrl" value="http://192.168.200.128:9090/cas/login"/>
+        <beans:property name="loginUrl" value="http://192.168.200.128:9100/cas/login"/>
         <beans:property name="serviceProperties" ref="serviceProperties"/>  
     </beans:bean>      
     <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">  
@@ -61,7 +61,7 @@
         <!-- ticketValidator 为票据验证器 -->
         <beans:property name="ticketValidator">  
             <beans:bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">  
-                <beans:constructor-arg index="0" value="http://192.168.200.128:9090/cas"/>
+                <beans:constructor-arg index="0" value="http://192.168.200.128:9100/cas"/>
             </beans:bean>  
         </beans:property>  
         <beans:property name="key" value="an_id_for_this_auth_provider_only"/> 

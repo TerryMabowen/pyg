@@ -27,4 +27,8 @@ public interface UserDao {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    List<User> selectByDay();
+
+    int selectCount();
 }
