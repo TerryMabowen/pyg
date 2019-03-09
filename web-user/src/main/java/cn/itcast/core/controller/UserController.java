@@ -53,7 +53,7 @@ public class UserController {
         //默认为pc端注册
         user.setSourceType("1");
         //使用状态默认为正常
-        user.setStatus("Y");
+        user.setStatus("1");
             userService.add(user);
             return new Result(true,"注册成功!");
         } catch (Exception e) {
