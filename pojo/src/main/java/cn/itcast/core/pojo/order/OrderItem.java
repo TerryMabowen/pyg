@@ -20,7 +20,15 @@ public class OrderItem implements Serializable {
      * 订单id
      */
     private Long orderId;
+    private String orderIdStr;
 
+    public String getOrderIdStr() {
+        return orderId+"";
+    }
+
+    public void setOrderIdStr(String orderIdStr) {
+        this.orderIdStr = orderIdStr;
+    }
     /**
      * 商品标题
      */

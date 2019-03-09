@@ -50,7 +50,7 @@
     <authentication-manager>
         <!-- 认证的提供者 -->
         <authentication-provider user-service-ref="userDetailService">
-            <password-encoder ref="passwordEncoder"></password-encoder>
+            <!--<password-encoder ref="passwordEncoder"></password-encoder>-->
         </authentication-provider>
     </authentication-manager>
 

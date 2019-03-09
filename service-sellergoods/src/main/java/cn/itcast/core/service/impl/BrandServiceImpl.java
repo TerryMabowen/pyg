@@ -65,6 +65,9 @@ public class BrandServiceImpl implements BrandService {
             if(brand.getFirstChar() != null && brand.getFirstChar().length()>0){
                 criteria.andFirstCharEqualTo(brand.getFirstChar());
             }
+            if (brand.getStat()!=null && !"".equals(brand.getStat())){
+                criteria.andStatEqualTo(brand.getStat());
+            }
         }
         PageHelper.startPage(page, rows);
         Page<Brand> brandPage = (Page<Brand>) brandDao.selectByExample(query);
@@ -76,4 +79,17 @@ public class BrandServiceImpl implements BrandService {
         List<Map> maps = brandDao.selectOptionList();
         return maps;
     }
+
+
+
+    //品牌申请  修改状态
+    @Override
+    public void updateStat(Long id) {
+        Brand brand = new Brand();
+        brand.setId(id);
+        brand.setStat("1");
+        brandDao.updateByPrimaryKeySelective(brand);
+    }
+
+
 }

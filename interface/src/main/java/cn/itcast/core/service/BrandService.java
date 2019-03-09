@@ -24,4 +24,10 @@ public interface BrandService {
     PageResult search(Integer page,Integer rows,Brand brand);
     //获取品牌列表数据格式是封装的map对象
     List<Map> selectOptionList();
+
+
+
+
+    //申请品牌  修改状态
+    void updateStat(Long id);
 }

@@ -23,4 +23,6 @@ public interface GoodsService {
     //批量修改状态
     void updateStatus(Long[] ids,String status);
 
+
+
 }
