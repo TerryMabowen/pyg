@@ -76,5 +76,6 @@ app.controller('goodsDescController' ,function($scope,$controller   ,goodsDescSe
 			}			
 		);
 	}
+
     
 });	

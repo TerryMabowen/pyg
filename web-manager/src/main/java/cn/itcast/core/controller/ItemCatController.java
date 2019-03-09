@@ -68,11 +68,11 @@ public class ItemCatController {
         }
     }
     //多条件分页查询
-    /*@RequestMapping("/search")
+    @RequestMapping("/search")
     public PageResult search(Integer page,Integer rows,@RequestBody ItemCat itemCat){
         PageResult pageResult = itemCatService.search(page, rows, itemCat);
         return pageResult;
-    }*/
+    }
     //根据上级ID查询商品分类列表
     @RequestMapping("/findByParentId")
     public List<ItemCat> findByParentId(Long parentId){
@@ -80,4 +80,17 @@ public class ItemCatController {
         return itemCatList;
     }
 
+    //修改状态
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long [] ids ,String status ){
+        try {
+            if(ids!=null&&ids.length>0){
+                    itemCatService.updateStatus(ids,status);
+            }
+            return new Result(true,"修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  new Result(false,"修改失败");
+        }
+    }
 }

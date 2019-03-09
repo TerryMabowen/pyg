@@ -1,24 +1,21 @@
 app.controller('brandController',function ($scope,brandService,$controller) {
     //继承baseController
     $controller('baseController',{$scope:$scope});
-    //查询所有并展示
-   /* $scope.findAll=function() {
-        brandService.findAll().success(
-            function (response) {
-                $scope.list = response;
-            }
-        )
-    }*/
 
-    //分页查询
-    /*$scope.findPage=function(page,rows){
-        brandService.findPage(page,rows).success(
-            function(response){
-                $scope.list=response.rows;
-                $scope.paginationConf.totalItems=response.total;//更新总记录数
+    // $scope.entity={goods:{},goodsDesc:{},itemList:[]}
+    //上传excel表格解析
+    $scope.uploadExcel = function () {
+        // 调用uploadService的方法完成文件的上传
+        brandService.uploadExcel().success(function (response) {
+            if (response.success == true) {
+                alert(response.message)
+                $scope.reloadList();//重新加载
+            } else {
+                alert(response.message);
             }
-        )
-    }*/
+        });
+    }
+
 
     //保存
     $scope.save=function () {
@@ -39,11 +36,11 @@ app.controller('brandController',function ($scope,brandService,$controller) {
                     $scope.reloadList();
                 }else {
                     //保存失败
-                    alert(response.massage);
+                    alert(response.message);
                 }
             }
         )
-    }
+    };
 
     //根据主键查询一条(修改时回显)
     $scope.findOne=function (id) {
@@ -81,4 +78,19 @@ app.controller('brandController',function ($scope,brandService,$controller) {
             }
         )
     }
+    // 显示状态
+    $scope.status = ["未申请","未审核","审核通过","已驳回"];
+
+    // 审核的方法:
+    $scope.updateStatus = function(status){
+        brandService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.success){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];//清空id集合
+            }else{
+                alert(response.message);
+            }
+        });
+    }
+
 })

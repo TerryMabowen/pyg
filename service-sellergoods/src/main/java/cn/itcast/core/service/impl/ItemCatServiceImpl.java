@@ -2,11 +2,15 @@ package cn.itcast.core.service.impl;
 
 
 import cn.itcast.core.dao.item.ItemCatDao;
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemCatQuery;
 import cn.itcast.core.service.ItemCatService;
 import cn.itcast.core.util.Constants;
 import com.alibaba.dubbo.config.annotation.Service;
+import javafx.scene.input.InputMethodTextRun;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import java.util.List;
@@ -37,6 +41,7 @@ public class ItemCatServiceImpl implements ItemCatService {
     //新增品牌
     @Override
     public void add(ItemCat itemCat) {
+        itemCat.setStat(Constants.YI_SHEN_HE);
         itemCatDao.insertSelective(itemCat);
     }
     //查询一条
@@ -58,7 +63,7 @@ public class ItemCatServiceImpl implements ItemCatService {
     }
 
     //多条件分页查询
-   /* @Override
+    @Override
     public PageResult search(Integer page, Integer rows, ItemCat itemCat) {
         ItemCatQuery query = new ItemCatQuery();
         ItemCatQuery.Criteria criteria = query.createCriteria();
@@ -66,11 +71,14 @@ public class ItemCatServiceImpl implements ItemCatService {
             if(itemCat.getName() != null && !"".equals(itemCat.getName())){
                 criteria.andNameLike("%"+itemCat.getName()+"%");
             }
+            if(itemCat.getStat()!=null){
+                criteria.andStatEqualTo(itemCat.getStat());
+            }
         }
         PageHelper.startPage(page, rows);
         Page<ItemCat> itemCatPage = (Page<ItemCat>) itemCatDao.selectByExample(query);
         return new PageResult(itemCatPage.getTotal(),itemCatPage.getResult());
-    }*/
+    }
     //根据上级ID查询商品分类列表
     //select * from tb_item_cat where parent_id = ?
     @Override
@@ -85,13 +93,42 @@ public class ItemCatServiceImpl implements ItemCatService {
                 redisTemplate.boundHashOps(Constants.REDIS_CATEGORY_LIST).put(itemCat.getName(),itemCat.getTypeId());
             }
         }
-
-
         ItemCatQuery query = new ItemCatQuery();
         ItemCatQuery.Criteria criteria = query.createCriteria();
         criteria.andParentIdEqualTo(parentId);
         List<ItemCat> itemCatList = itemCatDao.selectByExample(query);
         return itemCatList;
+    }
+
+    @Override
+    public void updateStatus(Long []  ids, String status) {
+        if(ids!=null){
+            for (Long id : ids) {
+                ItemCat itemCat = new ItemCat();
+                itemCat.setId(id);
+                itemCat.setStat(status);
+                itemCatDao.updateByPrimaryKeySelective(itemCat);
+            }
+        }
+    }
+
+    @Override
+    public List<ItemCat> selectByParentId(Long parentId) {
+        ItemCatQuery query = new ItemCatQuery();
+        ItemCatQuery.Criteria criteria = query.createCriteria();
+        criteria.andParentIdEqualTo(parentId);
+        List<ItemCat> itemCatList1 = itemCatDao.selectByExample(query);
+        for (ItemCat itemCat1 : itemCatList1) {
+            criteria.andParentIdEqualTo(itemCat1.getParentId());
+            List<ItemCat> itemCatList2 = itemCatDao.selectByExample(query);
+            for (ItemCat itemCat2 : itemCatList2) {
+                criteria.andParentIdEqualTo(itemCat2.getParentId());
+                List<ItemCat> itemCatList3 = itemCatDao.selectByExample(query);
+                itemCat2.setItemCatList(itemCatList3);
+            }
+            itemCat1.setItemCatList(itemCatList2);
+        }
+        return itemCatList1;
     }
 
 }

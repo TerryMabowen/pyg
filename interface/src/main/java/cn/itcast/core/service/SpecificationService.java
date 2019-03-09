@@ -25,4 +25,7 @@ public interface SpecificationService {
     PageResult search(Integer page, Integer rows, Specification specification);
     //获取规格列表数据格式是封装的map对象
     List<Map> selectOptionList();
+
+    //修改状态
+    void updateStatus(Long[] ids, String status);
 }

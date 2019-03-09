@@ -27,4 +27,7 @@ public interface TypeTemplateService {
     List<Map> findSpecList(Long id);
     //根据模板id查询规格选项集合
     List<Map> findSpecListByTypeId(Long templateId);
+
+    //审批
+    void updateStatus(Long[] ids, String status);
 }

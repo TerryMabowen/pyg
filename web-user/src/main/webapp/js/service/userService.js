@@ -22,16 +22,35 @@ app.service('userService',function($http){
 		return  $http.post('../user/update.do',entity );
 	}
 	//删除
-	this.dele=function(ids){
-		return $http.get('../user/delete.do?ids='+ids);
+	this.dele=function(id){
+		return $http.get('../user/delete.do?id='+id);
 	}
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../user/search.do?page='+page+"&rows="+rows, searchEntity);
 	}
+	//保存
+	this.addAddress=function (entity) {
+		return $http.post('../user/addAddress.do',entity);
+    };
+	//更新
 	//发送验证码
 	this.sendCode=function(phone){
 		return $http.get('../user/sendCode.do?phone='+phone);
 	}
-	
+	this.updateUser=function (entity) {
+		return $http.post('../user/updateUser.do',entity);
+    };
+	this.showAddress=function () {
+		return $http.get('../user/showAddress.do');
+    };
+    this.showUserInfo=function () {
+		return $http.get('../user/showUserInfo.do');
+    };
+    this.backShowAddress=function (id) {
+		return $http.get('../user/backShowAddress.do?id='+id);
+    }
+    this.collect=function () {
+		return $http.get('../user/collect.do');
+    }
 });

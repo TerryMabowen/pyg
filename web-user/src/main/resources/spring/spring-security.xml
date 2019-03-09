@@ -34,6 +34,15 @@
     </beans:bean>
     <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
         <!--service 配置自身工程的根地址+/login/cas   -->
+
+  	<!-- CAS入口点 开始 -->
+    <beans:bean id="casProcessingFilterEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
+        <!-- 单点登录服务器登录URL -->
+        <beans:property name="loginUrl" value="http://192.168.200.128:9100/cas/login"/>
+        <beans:property name="serviceProperties" ref="serviceProperties"/>
+    </beans:bean>
+    <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
+        <!--service 配置自身工程的根地址+/login/cas   -->
         <beans:property name="service" value="http://localhost:8090/login/cas"/>
     </beans:bean>
     <!-- CAS入口点 结束 -->
@@ -57,6 +66,23 @@
         </beans:property>
         <beans:property name="serviceProperties" ref="serviceProperties"/>
         <!-- ticketValidator 为票据验证器 -->
+        <beans:property name="ticketValidator">  
+            <beans:bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">  
+                <beans:constructor-arg index="0" value="http://192.168.200.128:9100/cas"/>
+            </beans:bean>  
+        </beans:property>  
+        <beans:property name="key" value="an_id_for_this_auth_provider_only"/> 
+    </beans:bean>        
+   		 <!-- 认证类 -->
+	<beans:bean id="userDetailsService" class="cn.itcast.core.service.impl.UserDetailServiceImpl"/>
+	
+	<!-- 认证过滤器 结束 -->
+	
+	
+	<!-- 单点登出  开始  -->     
+    <beans:bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>    
+    <!-- 经过此配置，当用户在地址栏输入本地工程 /logout/cas  -->      
+    <beans:bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">  
         <beans:property name="ticketValidator">
             <beans:bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
                 <beans:constructor-arg index="0" value="http://192.168.200.128:9100/cas"/>
