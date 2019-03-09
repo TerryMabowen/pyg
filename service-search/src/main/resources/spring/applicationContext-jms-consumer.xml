@@ -44,5 +44,30 @@
 		<property name="messageListener" ref="itemDeleteListener" />
 	</bean>
 	<bean id="itemDeleteListener" class="cn.itcast.core.listener.ItemDeleteListener"></bean>
+
+	<!-- 这些是下架的-->
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="queueSolrDeleteDestination2" />
+		<property name="messageListener" ref="itemDeleteListener2" />
+	</bean>
+	<bean id="itemDeleteListener2" class="cn.itcast.core.listener.ItemDeleteListener2"></bean>
+
+	<bean id="queueSolrDeleteDestination2" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="pinyougou_queue_solr_delete2"/>
+	</bean>
+
+
+	<!--这些是上架的-->
+	<bean id="topicPageAndSolrDestination2" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg value="pinyougou_topic_page_solr2"/>
+	</bean>
+
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="topicPageAndSolrDestination2" />
+		<property name="messageListener" ref="pageAndSolrListener2" />
+	</bean>
+	<bean id="pageAndSolrListener2" class="cn.itcast.core.listener.ItemSearchListener2"></bean>
 	
 </beans>

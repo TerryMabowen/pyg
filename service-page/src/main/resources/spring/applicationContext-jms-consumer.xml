@@ -33,5 +33,18 @@
 		<property name="messageListener" ref="pageListener" />
 	</bean>
 	<bean id="pageListener" class="cn.itcast.core.listener.PageListener"></bean>
+
+
+	<!--这些是上架生成页面-->
+	<bean id="topicPageAndSolrDestination2" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg value="pinyougou_topic_page_solr2"/>
+	</bean>
+
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="topicPageAndSolrDestination2" />
+		<property name="messageListener" ref="pageListener2" />
+	</bean>
+	<bean id="pageListener2" class="cn.itcast.core.listener.PageListener2"></bean>
 	
 </beans>

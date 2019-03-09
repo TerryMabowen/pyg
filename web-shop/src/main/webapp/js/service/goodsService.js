@@ -25,6 +25,22 @@ app.service('goodsService',function($http){
 	this.dele=function(ids){
 		return $http.get('../goods/delete.do?ids='+ids);
 	}
+    //上架功能查询商品列表
+    this.findGoodsForUpShelf=function(){
+        return $http.get('../goods/findGoodsForUpShelf.do');
+    }
+    //上架
+    this.upShelf=function(ids){
+        return $http.get('../goods/upShelf.do?ids='+ids);
+    }
+    //下架功能查询商品列表
+    this.findGoodsForDownShelf=function(){
+        return $http.get('../goods/findGoodsForDownShelf.do');
+    }
+    //下架
+    this.downShelf=function(ids){
+        return $http.get('../goods/downShelf.do?ids='+ids);
+    }
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../goods/search.do?page='+page+"&rows="+rows, searchEntity);
