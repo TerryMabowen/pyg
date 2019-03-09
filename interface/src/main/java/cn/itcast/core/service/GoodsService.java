@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface GoodsService {
     //添加商品
     void add(GoodsEntity goodsEntity);
@@ -37,7 +37,10 @@ public interface GoodsService {
     //下架功能查询商品列表
     public List<Goods> findGoodsForDownShelf(String sellerId);
 
+
     //批量修改状态
     void updateStatus(Long[] ids, String status);
+
+
 
 }

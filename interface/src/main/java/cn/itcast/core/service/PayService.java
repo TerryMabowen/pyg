@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 
-@Repository
+
 public interface PayService {
     //调用微信支付sdk统一下单接口生成支付链接
     public Map<String, String> createNative(String out_trade_no, String total_fee);

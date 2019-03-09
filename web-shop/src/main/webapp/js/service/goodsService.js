@@ -41,8 +41,14 @@ app.service('goodsService',function($http){
     this.downShelf=function(ids){
         return $http.get('../goods/downShelf.do?ids='+ids);
     }
+    //提交审核
+    this.updateStat=function(ids){
+        return $http.get('../goods/updateStat.do?ids='+ids);
+    }
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../goods/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+
+
 });

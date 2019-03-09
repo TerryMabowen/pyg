@@ -5,6 +5,7 @@ import cn.itcast.core.dao.good.GoodsDao;
 import cn.itcast.core.dao.good.GoodsDescDao;
 import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.dao.item.ItemDao;
+import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.seller.SellerDao;
 import cn.itcast.core.pojo.entity.GoodsEntity;
 import cn.itcast.core.pojo.entity.PageResult;
@@ -12,6 +13,8 @@ import cn.itcast.core.pojo.good.*;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemQuery;
+import cn.itcast.core.pojo.order.Order;
+import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.service.GoodsService;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -24,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.jms.JMSException;
@@ -73,6 +77,8 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     @Qualifier("queueSolrDeleteDestination")
     private ActiveMQQueue queueSolrDeleteDestination;
+    @Autowired
+    OrderDao orderDao;
 
     //下架点对点
     @Autowired
@@ -97,6 +103,8 @@ public class GoodsServiceImpl implements GoodsService {
                 for (Item item : itemList) {
                     //初始化库存对象的属性值
                     setItemValues(goodsEntity, item);
+                    //初始化库存对象的属性值
+                    setItemValues(goodsEntity,item);
                     //库存标题, 通过 商品名称 + 规格=库存标题
                     //商品名称
                     String title = goodsEntity.getGoods().getGoodsName();
@@ -357,6 +365,8 @@ public class GoodsServiceImpl implements GoodsService {
         }
     }
 
+
+
     //初始化库存对象的值
     private Item setItemValues(GoodsEntity goodsEntity, Item item) {
         //品牌名称
@@ -388,4 +398,8 @@ public class GoodsServiceImpl implements GoodsService {
         item.setStatus("0");
         return item;
     }
+
+
+
+
 }

@@ -2,16 +2,15 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.good.Brand;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-@Repository
+
 public interface BrandService {
     //查询所有
     List<Brand> queryAll();
     //分页查询
-    PageResult findPage(Integer page,Integer rows);
+  /*  PageResult findPage(Integer page,Integer rows);*/
     //新增品牌
     void add(Brand brand);
     //查询一条
@@ -27,4 +26,10 @@ public interface BrandService {
 
     //修改状态
     void updateStatus(Long[] ids, String status);
+
+
+
+
+    //申请品牌  修改状态
+    void updateStat(Long id);
 }

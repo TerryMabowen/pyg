@@ -28,4 +28,8 @@ public interface OrderDao {
 
     int updateByPrimaryKey(Order record);
 
+
+
+    String selectPayment(@Param("date")String date ,@Param("userName")String userName);
+
 }

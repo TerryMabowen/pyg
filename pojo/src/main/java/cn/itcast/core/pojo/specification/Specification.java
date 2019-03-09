@@ -12,6 +12,10 @@ public class Specification implements Serializable {
      * 名称
      */
     private String specName;
+    /**
+     * 状态
+     */
+    private String stat;
 
     private String stat;
 

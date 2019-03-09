@@ -23,6 +23,8 @@ public class SpecificationOption implements Serializable {
      */
     private Integer orders;
 
+    private String stat;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -57,6 +59,14 @@ public class SpecificationOption implements Serializable {
         this.orders = orders;
     }
 
+    public String getStat() {
+        return stat;
+    }
+
+    public void setStat(String stat) {
+        this.stat = stat == null ? null : stat.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -67,6 +77,7 @@ public class SpecificationOption implements Serializable {
         sb.append(", optionName=").append(optionName);
         sb.append(", specId=").append(specId);
         sb.append(", orders=").append(orders);
+        sb.append(", stat=").append(stat);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -87,7 +98,8 @@ public class SpecificationOption implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOptionName() == null ? other.getOptionName() == null : this.getOptionName().equals(other.getOptionName()))
             && (this.getSpecId() == null ? other.getSpecId() == null : this.getSpecId().equals(other.getSpecId()))
-            && (this.getOrders() == null ? other.getOrders() == null : this.getOrders().equals(other.getOrders()));
+            && (this.getOrders() == null ? other.getOrders() == null : this.getOrders().equals(other.getOrders()))
+            && (this.getStat() == null ? other.getStat() == null : this.getStat().equals(other.getStat()));
     }
 
     @Override
@@ -98,6 +110,7 @@ public class SpecificationOption implements Serializable {
         result = prime * result + ((getOptionName() == null) ? 0 : getOptionName().hashCode());
         result = prime * result + ((getSpecId() == null) ? 0 : getSpecId().hashCode());
         result = prime * result + ((getOrders() == null) ? 0 : getOrders().hashCode());
+        result = prime * result + ((getStat() == null) ? 0 : getStat().hashCode());
         return result;
     }
 }

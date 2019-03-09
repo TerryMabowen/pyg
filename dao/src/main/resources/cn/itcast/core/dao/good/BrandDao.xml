@@ -90,6 +90,8 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     id,name,first_char,stat
+    select
+    id,name,first_char,stat
     from tb_brand
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -104,11 +106,15 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.itcast.core.pojo.good.Brand" >
-    insert into tb_brand (id, name, first_char, 
+    insert into tb_brand (id, name, first_char,
       stat)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR},
       #{stat,jdbcType=VARCHAR})
 
+    insert into tb_brand (id, name, first_char,
+    stat)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR},
+    #{stat,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.itcast.core.pojo.good.Brand" >
     insert into tb_brand
@@ -135,6 +141,9 @@
       </if>
       <if test="firstChar != null" >
         #{firstChar,jdbcType=VARCHAR},
+      </if>
+      <if test="stat != null" >
+        #{stat,jdbcType=VARCHAR},
       </if>
       <if test="stat != null" >
         #{stat,jdbcType=VARCHAR},
@@ -173,6 +182,9 @@
       name = #{record.name,jdbcType=VARCHAR},
       first_char = #{record.firstChar,jdbcType=VARCHAR},
       stat = #{record.stat,jdbcType=VARCHAR}
+    name = #{record.name,jdbcType=VARCHAR},
+    first_char = #{record.firstChar,jdbcType=VARCHAR},
+    stat = #{record.stat,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>

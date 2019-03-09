@@ -70,6 +70,17 @@ public class SpecificationController {
             return new Result(false,"删除失败!");
         }
     }
+    //批量删除
+    @RequestMapping("/updateStat")
+    public Result updateStat(Long[] ids){
+        try {
+            specificationService.updateStat(ids);
+            return new Result(true,"提交成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"提交失败!");
+        }
+    }
     //多条件分页查询
     @RequestMapping("/search")
     public PageResult search(Integer page,Integer rows,@RequestBody Specification specification){

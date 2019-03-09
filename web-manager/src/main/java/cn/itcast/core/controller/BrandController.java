@@ -6,7 +6,6 @@ import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.service.BrandService;
 import com.alibaba.dubbo.config.annotation.Reference;
-import org.omg.SendingContext.RunTime;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,12 +25,12 @@ public class BrandController {
         List<Brand> brandList = brandService.queryAll();
         return brandList;
     }
-    //分页查询
+   /* //分页查询
     @RequestMapping("/findPage")
     public PageResult findPage(Integer page,Integer rows){
-        PageResult pageResult = brandService.findPage(page, rows);
+        PageResult pageResult = brandService.search(page, rows);
         return pageResult;
-    }
+    }*/
     //新增品牌
     @RequestMapping("/add")
     public Result add(@RequestBody Brand brand){
@@ -80,6 +79,7 @@ public class BrandController {
     @RequestMapping("/selectOptionList")
     public List<Map> selectOptionList(){
         List<Map> maps = brandService.selectOptionList();
+        System.out.println(maps);
         return maps;
     }
     //修改状态

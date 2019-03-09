@@ -1,0 +1,69 @@
+
+<html>
+<head>
+    <title>Title</title>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/echarts.js"></script>
+
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <script src="../js/echarts.js"></script>
+</head>
+<body>
+
+
+
+
+
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id="main" style="width: 600px;height:400px;"></div>
+
+
+
+<script type="text/javascript">
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var option = {
+        title: {
+            text: '销售额折线图'
+        },
+        tooltip: {},
+        legend: {
+            data:['销售额']
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: []
+        },
+        yAxis: {
+            /*name: '销售额',*/
+            type: 'value'
+        },
+        series: [{
+            data: [],
+            type: 'line',
+            areaStyle: {}
+        }]
+    };
+
+    myChart.setOption(option);
+    // 异步加载数据
+    $.get('../orders/getJsonData.do').done(function (data) {
+        // 填入数据
+        myChart.setOption({
+            xAxis: {
+                data: data.dateList
+            },
+            series: [{
+                // 根据名字对应到相应的系列
+                name: '销售额',
+                data: data.payList
+            }]
+        });
+    });
+
+</script>
+</body>
+</html>

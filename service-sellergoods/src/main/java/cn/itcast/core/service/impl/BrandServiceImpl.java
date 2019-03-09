@@ -26,13 +26,13 @@ public class BrandServiceImpl implements BrandService {
         return brandDao.selectByExample(null);
     }
     //分页查询
-    @Override
+   /* @Override
     public PageResult findPage(Integer page, Integer rows) {
         PageHelper.startPage(page,rows);
         Page<Brand> brandPage = (Page<Brand>)brandDao.selectByExample(null);
         PageResult pageResult = new PageResult(brandPage.getTotal(),brandPage.getResult());
         return pageResult;
-    }
+    }*/
     //新增品牌
     @Override
     public void add(Brand brand) {
@@ -71,6 +71,9 @@ public class BrandServiceImpl implements BrandService {
             if(brand.getStat()!=null){
                   criteria.andStatEqualTo(brand.getStat());
             }
+            if (brand.getStat()!=null && !"".equals(brand.getStat())){
+                criteria.andStatEqualTo(brand.getStat());
+            }
         }
         PageHelper.startPage(page, rows);
         Page<Brand> brandPage = (Page<Brand>) brandDao.selectByExample(query);
@@ -94,4 +97,17 @@ public class BrandServiceImpl implements BrandService {
            }
        }
     }
+
+
+
+    //品牌申请  修改状态
+    @Override
+    public void updateStat(Long id) {
+        Brand brand = new Brand();
+        brand.setId(id);
+        brand.setStat("1");
+        brandDao.updateByPrimaryKeySelective(brand);
+    }
+
+
 }

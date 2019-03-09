@@ -37,6 +37,7 @@ public class ItemCat implements Serializable {
         this.itemCatList = itemCatList;
     }
 
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {

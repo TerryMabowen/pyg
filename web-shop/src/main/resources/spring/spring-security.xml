@@ -50,7 +50,7 @@
     <authentication-manager>
         <!-- 认证的提供者 -->
         <authentication-provider user-service-ref="userDetailService">
-            <password-encoder ref="passwordEncoder"></password-encoder>
+            <!--<password-encoder ref="passwordEncoder"></password-encoder>-->
         </authentication-provider>
     </authentication-manager>
 
@@ -66,5 +66,5 @@
         <beans:property name="sellerService" ref="sellerService"></beans:property>
     </beans:bean>
 
-    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+   <!-- <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>-->
 </beans:beans>

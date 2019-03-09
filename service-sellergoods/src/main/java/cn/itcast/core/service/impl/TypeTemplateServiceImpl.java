@@ -44,18 +44,11 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         return typeTemplateDao.selectByExample(null);
     }
 
-    //分页查询
-    @Override
-    public PageResult findPage(Integer page, Integer rows) {
-        PageHelper.startPage(page, rows);
-        Page<TypeTemplate> typeTemplatePage = (Page<TypeTemplate>) typeTemplateDao.selectByExample(null);
-        PageResult pageResult = new PageResult(typeTemplatePage.getTotal(), typeTemplatePage.getResult());
-        return pageResult;
-    }
 
-    //新增品牌
+    //新增规格
     @Override
     public void add(TypeTemplate typeTemplate) {
+        //typeTemplate.setStat("0");
         typeTemplate.setStat(Constants.YI_SHEN_HE);
         typeTemplateDao.insertSelective(typeTemplate);
     }
@@ -80,9 +73,19 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         }
     }
 
+    //批量提交审核
+    @Override
+    public void updateStat(Long[] ids) {
+        for (Long id : ids) {
+            TypeTemplate typeTemplate = typeTemplateDao.selectByPrimaryKey(id);
+            typeTemplate.setStat("1");
+            typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
+        }
+    }
+
     //多条件分页查询
     @Override
-    public PageResult search(Integer page, Integer rows, TypeTemplate typeTemplate) {
+    public PageResult search(TypeTemplate typeTemplate, int page, int rows) {
         /**
          * 查询模板所有数据, 以模板id作为key, 对应的品牌集合作为value存入Redis中
          * 查询模板所有数据, 以模板id作为key, 对应的规格集合作为value存入Redis中
@@ -101,17 +104,19 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
                 if (specList != null) {
                     redisTemplate.boundHashOps(Constants.REDIS_SPEC_LIST).put(template.getId(), specList);
                 }
+
             }
         }
-
-
         TypeTemplateQuery query = new TypeTemplateQuery();
         TypeTemplateQuery.Criteria criteria = query.createCriteria();
         if (typeTemplate != null) {
             if (typeTemplate.getName() != null && !"".equals(typeTemplate.getName())) {
                 criteria.andNameLike("%" + typeTemplate.getName() + "%");
             }
-            if(typeTemplate.getStat()!=null){
+//            if(typeTemplate.getStat()!=null){
+//                criteria.andStatEqualTo(typeTemplate.getStat());
+//            }
+            if (typeTemplate.getStat() != null && !"".equals(typeTemplate.getStat())) {
                 criteria.andStatEqualTo(typeTemplate.getStat());
             }
         }

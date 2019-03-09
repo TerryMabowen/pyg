@@ -530,4 +530,9 @@
       seller_id = #{sellerId,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
+
+  <!--创建销售额折线图查询语句-->
+  <select id="selectPayment" resultType="java.lang.String">
+    select SUM(payment) from tb_order where create_time like #{date} and seller_id =#{userName}
+  </select>
 </mapper>
