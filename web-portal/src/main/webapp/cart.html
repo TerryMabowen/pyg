@@ -12,8 +12,10 @@
     <script type="text/javascript" src="plugins/angularjs/angular.min.js"> </script>
 	<script type="text/javascript" src="js/base.js"> </script>
 	<script type="text/javascript" src="js/service/cartService.js"> </script>
+	<script type="text/javascript" src="js/service/collectionService.js"> </script>
 	<script type="text/javascript" src="js/controller/cartController.js"> </script>
-    
+	<script type="text/javascript" src="js/controller/collectionController.js"> </script>
+
 </head>
 
 <body ng-app="pinyougou" ng-controller="cartController" ng-init="findCartList()">
@@ -95,7 +97,7 @@
 								<li class="yui3-u-1-8"><span class="sum">{{item.totalFee}}</span></li>
 								<li class="yui3-u-1-8">
 									<a href="#none">删除</a><br />
-									<a href="#none">移到我的关注</a>
+									<a ng-click="addGoodsToCollectionList(item.id)">移到我的关注</a>
 								</li>
 							</ul>
 						</div>

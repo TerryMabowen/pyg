@@ -8,6 +8,7 @@ import cn.itcast.core.pojo.item.ItemCatQuery;
 import cn.itcast.core.service.ItemCatService;
 import cn.itcast.core.util.Constants;
 import com.alibaba.dubbo.config.annotation.Service;
+import javafx.scene.input.InputMethodTextRun;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +110,25 @@ public class ItemCatServiceImpl implements ItemCatService {
                 itemCatDao.updateByPrimaryKeySelective(itemCat);
             }
         }
+    }
+
+    @Override
+    public List<ItemCat> selectByParentId(Long parentId) {
+        ItemCatQuery query = new ItemCatQuery();
+        ItemCatQuery.Criteria criteria = query.createCriteria();
+        criteria.andParentIdEqualTo(parentId);
+        List<ItemCat> itemCatList1 = itemCatDao.selectByExample(query);
+        for (ItemCat itemCat1 : itemCatList1) {
+            criteria.andParentIdEqualTo(itemCat1.getParentId());
+            List<ItemCat> itemCatList2 = itemCatDao.selectByExample(query);
+            for (ItemCat itemCat2 : itemCatList2) {
+                criteria.andParentIdEqualTo(itemCat2.getParentId());
+                List<ItemCat> itemCatList3 = itemCatDao.selectByExample(query);
+                itemCat2.setItemCatList(itemCatList3);
+            }
+            itemCat1.setItemCatList(itemCatList2);
+        }
+        return itemCatList1;
     }
 
 }

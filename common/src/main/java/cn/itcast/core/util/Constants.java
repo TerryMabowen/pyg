@@ -15,6 +15,9 @@ public interface Constants {
     public final static String REDIS_PAYLOG = "payLog";
    //设置cookie中用户未登录后购物车集合的主键
     public final static String COOKIE_CARTLIST = "logout_cartList";
+    //设置Redis中用户已登录后收藏集合的主键
+    public final static String REDIS_COLLECTIONLIST = "login_collectionList";
+
     //未申请状态码
     public final static String WEI_SHEN_QING = "0";
     //已申请未审核状态码
@@ -23,4 +26,5 @@ public interface Constants {
     public final static String YI_SHEN_HE = "2";
     //驳回状态码
     public final static String YI_BO_HUI = "3";
+
 }

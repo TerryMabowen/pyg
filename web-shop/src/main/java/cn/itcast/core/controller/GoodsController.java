@@ -29,6 +29,7 @@ public class GoodsController {
         //获取当前登录的用户的用户名
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         goodsEntity.getGoods().setSellerId(userName);
+        //String userName = "baidu";
         try {
             goodsService.add(goodsEntity);
             return new Result(true, "添加商品成功!");

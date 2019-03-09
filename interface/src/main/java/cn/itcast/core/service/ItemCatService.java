@@ -25,6 +25,8 @@ public interface ItemCatService {
     //根据上级ID查询商品分类列表
     List<ItemCat> findByParentId(Long parentId);
 
+    List<ItemCat> selectByParentId(Long parentId);
+
     //修改状态
     void updateStatus(Long [] ids, String status);
 }

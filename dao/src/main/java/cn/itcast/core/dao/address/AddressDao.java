@@ -3,6 +3,8 @@ package cn.itcast.core.dao.address;
 import cn.itcast.core.pojo.address.Address;
 import cn.itcast.core.pojo.address.AddressQuery;
 import java.util.List;
+
+import cn.itcast.core.pojo.user.User;
 import org.apache.ibatis.annotations.Param;
 
 public interface AddressDao {
@@ -27,4 +29,5 @@ public interface AddressDao {
     int updateByPrimaryKeySelective(Address record);
 
     int updateByPrimaryKey(Address record);
+
 }

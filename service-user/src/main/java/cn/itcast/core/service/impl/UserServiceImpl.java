@@ -1,11 +1,17 @@
 package cn.itcast.core.service.impl;
 
+import cn.itcast.core.dao.address.AddressDao;
 import cn.itcast.core.dao.user.UserDao;
+import cn.itcast.core.pojo.address.Address;
+import cn.itcast.core.pojo.address.AddressQuery;
+import cn.itcast.core.pojo.entity.UserInfo;
+import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Statistics_user;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.pojo.user.UserQuery;
 import cn.itcast.core.service.UserService;
+import cn.itcast.core.util.Constants;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -25,6 +31,15 @@ import javax.jms.Session;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import java.util.List;
+
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -42,6 +57,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private AddressDao addressDao;
 
     @Value("${smsSign}")
     private String smsName;
@@ -189,4 +207,88 @@ public class UserServiceImpl implements UserService {
         statistics_userArrayList.add(statistics_user);
         return statistics_userArrayList;
     }
+
+    @Override
+    public UserInfo findUserInfoByUsername(String userName) {
+        UserInfo userInfo = new UserInfo();
+        UserQuery userQuery = new UserQuery();
+        UserQuery.Criteria criteria = userQuery.createCriteria();
+        criteria.andUsernameEqualTo(userName);
+        List<User> users = userDao.selectByExample(userQuery);
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        if(users != null) {
+            for (User user : users) {
+                String birthday = formatter.format(user.getBirthday());
+                String[] split = birthday.split("-");
+                userInfo.setYear(split[0]);
+                userInfo.setMonth(split[1]);
+                userInfo.setDay(split[2]);
+                userInfo.setHeadPic(user.getHeadPic());
+                userInfo.setJob(user.getJob());
+                userInfo.setNickName(user.getNickName());
+                userInfo.setSex(user.getSex());
+            }
+        }
+        AddressQuery addressQuery = new AddressQuery();
+        AddressQuery.Criteria criteria1 = addressQuery.createCriteria();
+        criteria1.andUserIdEqualTo(userName);
+        List<Address> addresses = addressDao.selectByExample(addressQuery);
+        if(addresses != null) {
+            for (Address address : addresses) {
+               userInfo.setProvinceId(address.getProvinceId());
+               userInfo.setCityId(address.getCityId());
+               userInfo.setTownId(address.getTownId());
+            }
+        }
+        return userInfo;
+    }
+
+    @Override
+    public void update(String userName,UserInfo userInfo)throws Exception {
+        User user = new User();
+        user.setUsername(userName);
+        user.setUpdated(new Date());
+        user.setNickName(userInfo.getNickName());
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String date = userInfo.getYear() + "-" + userInfo.getMonth() + "-" + userInfo.getDay();
+        Date parse = formatter.parse(date);
+        user.setBirthday(parse);
+        user.setSex(userInfo.getSex());
+        user.setHeadPic(userInfo.getHeadPic());
+        user.setJob(userInfo.getJob());
+        UserQuery userQuery = new UserQuery();
+        UserQuery.Criteria criteria = userQuery.createCriteria();
+        if(user.getUsername() != null && !"".equals(user.getUsername())) {
+            criteria.andUsernameEqualTo(user.getUsername());
+        }
+        userDao.updateByExampleSelective(user,userQuery);
+    }
+
+    @Override
+    public void addAddress(Address address) {
+        addressDao.insertSelective(address);
+    }
+
+    @Override
+    public Address backShowAddress(Long id) {
+        Address address = addressDao.selectByPrimaryKey(id);
+        return address;
+    }
+
+    @Override
+    public void updateAddress(Address address) {
+        addressDao.updateByPrimaryKeySelective(address);
+    }
+
+    @Override
+    public void delete(Long id){
+        addressDao.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Item> findItemFromRedis (String userName){
+        List<Item> itemList = (List<Item>) redisTemplate.boundHashOps(Constants.REDIS_COLLECTIONLIST).get(userName);
+        return itemList;
+    }
+
 }

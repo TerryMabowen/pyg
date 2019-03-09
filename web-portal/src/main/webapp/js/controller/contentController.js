@@ -11,5 +11,19 @@ app.controller("contentController",function($scope,contentService){
 	$scope.search=function(){
 		location.href="http://localhost:8082/search.html#?keywords="+$scope.keywords;
 	}
+
+	//实战
+    $scope.selectByParentId = function(parentId){
+        contentService.selectByParentId(parentId).success(function(response){
+            $scope.itemCatList[parentId] = response;
+        });
+    }
+
+    //实战
+    $scope.queryShow = function(floor){
+        contentService.queryShow(floor).success(function(response){
+            $scope.contentDesc[floor] = response;
+        });
+    }
 	
 });

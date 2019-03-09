@@ -3,21 +3,27 @@ package cn.itcast.core.service.impl;
 import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
+import cn.itcast.core.dao.seller.SellerDao;
 import cn.itcast.core.pojo.cart.BuyerCart;
+import cn.itcast.core.pojo.entity.OrderDesc;
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderItemQuery;
+import cn.itcast.core.pojo.order.OrderQuery;
+import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.service.OrderService;
 import cn.itcast.core.util.Constants;
 import cn.itcast.core.util.IdWorker;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -36,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private IdWorker idWorker;
+
+    @Autowired
+    private SellerDao sellerDao;
 
     @Override
     public void add(Order order) {
@@ -158,4 +167,49 @@ public class OrderServiceImpl implements OrderService {
             }
         }
     }
+
+   @Override
+    public List<OrderDesc> findOrderDescByUsername(String userName,String status){
+        List<OrderDesc> orderDescList = new ArrayList<>();
+       OrderDesc orderDesc = new OrderDesc();
+       OrderQuery orderQuery = new OrderQuery();
+       OrderQuery.Criteria criteria = orderQuery.createCriteria();
+       criteria.andUserIdEqualTo(userName);
+       if(status != null && !"".equals(status) && !"undefined".equals(status)){
+           criteria.andStatusEqualTo(status);
+       }
+       List<Order> orderList = orderDao.selectByExample(orderQuery);
+       if(orderList != null && orderList.size() > 0){
+           orderDesc.setOrderList(orderList);
+           for (Order order : orderList) {
+               Long orderId = order.getOrderId();
+               orderDesc.setOrderId(orderId);
+               orderDesc.setOrderIdStr(orderId+"");
+               orderDesc.setPaymentType(order.getPaymentType());
+               orderDesc.setCreateTime(order.getCreateTime());
+               orderDesc.setUpdateTime(order.getUpdateTime());
+               orderDesc.setPostFee(order.getPostFee());
+               orderDesc.setStatus(order.getStatus());
+               orderDesc.setBuyerNick(order.getBuyerNick());
+               orderDesc.setReceiverAreaName(order.getReceiverAreaName());
+               orderDesc.setReceiverMobile(order.getReceiverMobile());
+               orderDesc.setReceiver(order.getReceiver());
+
+               OrderItemQuery orderItemQuery = new OrderItemQuery();
+               OrderItemQuery.Criteria criteria1 = orderItemQuery.createCriteria();
+               criteria1.andOrderIdEqualTo(orderId);
+               List<OrderItem> orderItemList = orderItemDao.selectByExample(orderItemQuery);
+               if(orderItemList != null){
+                   orderDesc.setOrderItemList(orderItemList);
+               }
+               String sellerId = order.getSellerId();
+               Seller seller = sellerDao.selectByPrimaryKey(sellerId);
+               orderDesc.setSellerName(seller.getName());
+           }
+           orderDescList.add(orderDesc);
+       }
+       return orderDescList;
+    }
+
+
 }

@@ -6,6 +6,7 @@ import cn.itcast.core.service.OrderService;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ public class OrderController {
     private OrderService orderService;
 
     @RequestMapping("/add")
+    @CrossOrigin(origins = "http://localhost:8090" ,allowCredentials = "true") //注解解决跨域访问问题
     public Result add(@RequestBody Order order){
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();

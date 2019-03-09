@@ -1,5 +1,7 @@
 package cn.itcast.core.pojo.address;
 
+import cn.itcast.core.pojo.user.User;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -60,6 +62,16 @@ public class Address implements Serializable {
      * 别名
      */
     private String alias;
+
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     private static final long serialVersionUID = 1L;
 

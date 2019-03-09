@@ -1,7 +1,10 @@
 package cn.itcast.core.pojo.user;
 
+import cn.itcast.core.pojo.address.Address;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class User implements Serializable {
     private Long id;
@@ -103,10 +106,33 @@ public class User implements Serializable {
      */
     private Date birthday;
 
+
+
     /**
      * 最后登录时间
      */
     private Date lastLoginTime;
+
+    private String job;
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    private List<Address> addressList;
+
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
+    }
+
 
     private static final long serialVersionUID = 1L;
 
