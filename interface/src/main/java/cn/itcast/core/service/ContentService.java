@@ -25,4 +25,8 @@ public interface ContentService {
     //从Redis查询
     List<Content> findByCategoryIdFromRedis(Long categoryId);
 
+    List<Content> findNameById(String floor);
+
+
+
 }

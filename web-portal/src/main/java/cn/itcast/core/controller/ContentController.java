@@ -21,4 +21,11 @@ public class ContentController {
         List<Content> contentList = contentService.findByCategoryIdFromRedis(categoryId);
         return  contentList;
     }
+
+    @RequestMapping("queryAll")
+    public List<Content> queryAll(){
+        List<Content> contents = contentService.queryAll();
+        return contents;
+    }
+
 }

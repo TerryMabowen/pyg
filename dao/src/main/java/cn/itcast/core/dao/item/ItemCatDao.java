@@ -18,6 +18,7 @@ public interface ItemCatDao {
 
     List<ItemCat> selectByExample(ItemCatQuery example);
 
+
     ItemCat selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") ItemCat record, @Param("example") ItemCatQuery example);

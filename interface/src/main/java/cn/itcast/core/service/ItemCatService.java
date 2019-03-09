@@ -24,4 +24,6 @@ public interface ItemCatService {
     //PageResult search(Integer page, Integer rows, ItemCat itemCat);
     //根据上级ID查询商品分类列表
     List<ItemCat> findByParentId(Long parentId);
+
+    List<ItemCat> selectByParentId(Long parentId);
 }
