@@ -22,4 +22,7 @@ public interface ContentCategoryService {
     //多条件分页查询
     PageResult search(Integer page, Integer rows, ContentCategory contentCategory);
 
+    ContentCategory findAllById(String floor);
+
+
 }

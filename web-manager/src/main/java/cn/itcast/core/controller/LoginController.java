@@ -15,6 +15,7 @@ public class LoginController {
     public Map name() {
         String name = SecurityContextHolder.getContext()
                 .getAuthentication().getName();
+        //String name = "baidu";
         Map map = new HashMap();
         map.put("userName", name);
         return map;
