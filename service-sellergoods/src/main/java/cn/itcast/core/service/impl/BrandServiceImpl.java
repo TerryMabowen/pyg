@@ -24,13 +24,13 @@ public class BrandServiceImpl implements BrandService {
         return brandDao.selectByExample(null);
     }
     //分页查询
-    @Override
+   /* @Override
     public PageResult findPage(Integer page, Integer rows) {
         PageHelper.startPage(page,rows);
         Page<Brand> brandPage = (Page<Brand>)brandDao.selectByExample(null);
         PageResult pageResult = new PageResult(brandPage.getTotal(),brandPage.getResult());
         return pageResult;
-    }
+    }*/
     //新增品牌
     @Override
     public void add(Brand brand) {

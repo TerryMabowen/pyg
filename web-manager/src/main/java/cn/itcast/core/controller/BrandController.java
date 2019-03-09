@@ -25,12 +25,12 @@ public class BrandController {
         List<Brand> brandList = brandService.queryAll();
         return brandList;
     }
-    //分页查询
+   /* //分页查询
     @RequestMapping("/findPage")
     public PageResult findPage(Integer page,Integer rows){
-        PageResult pageResult = brandService.findPage(page, rows);
+        PageResult pageResult = brandService.search(page, rows);
         return pageResult;
-    }
+    }*/
     //新增品牌
     @RequestMapping("/add")
     public Result add(@RequestBody Brand brand){
@@ -79,6 +79,7 @@ public class BrandController {
     @RequestMapping("/selectOptionList")
     public List<Map> selectOptionList(){
         List<Map> maps = brandService.selectOptionList();
+        System.out.println(maps);
         return maps;
     }
 }

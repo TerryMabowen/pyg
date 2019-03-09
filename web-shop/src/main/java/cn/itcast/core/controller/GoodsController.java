@@ -77,4 +77,20 @@ public class GoodsController {
             return new Result(false,"删除失败!");
         }
     }
+
+    @RequestMapping("/audit_status")
+    public Result updateStat(Long[] ids,String status){
+        try {
+            goodsService.updateStatus(ids,status);
+//            if(ids != null && ids.length > 0) {
+//                for (Long id : ids) {
+//                    itemSearchService.deleteList(id);
+//                }
+//            }
+            return new Result(true,"删除成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"删除失败!");
+        }
+    }
 }

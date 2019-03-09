@@ -23,9 +23,10 @@
     
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/service/goodsService.js"></script>
-    <script type="text/javascript" src="../js/service/itemCatService.js"></script>
+    <script type="text/javascript" src="../js/service/shop_itemCatService.js"></script>
     <script type="text/javascript" src="../js/service/uploadService.js"></script>
-    <script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
+    <script type="text/javascript" src="../js/service/shop_typeTemplateService.js"></script>
+    <script type="text/javascript" src="../js/service/seckill_goodsService.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
     <script type="text/javascript" src="../js/controller/goodsController.js"></script>
 
@@ -49,7 +50,7 @@
                                     <div class="btn-group">
                                         <a href="goods_edit.html"  class="btn btn-default">新建</a>
                                         <button ng-click="dele()" type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>
-                                        <button type="button" class="btn btn-default" title="提交审核" ><i class="fa fa-check"></i> 提交审核</button>
+                                        <button ng-click="updateStat()"  type="button" class="btn btn-default" title="提交审核" ><i class="fa fa-check"></i> 提交审核</button>
                                         <button type="button" class="btn btn-default" title="屏蔽" onclick='confirm("你确认要屏蔽吗？")'><i class="fa fa-ban"></i> 屏蔽</button>
                                         <button type="button"  class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
                                     </div>
@@ -59,10 +60,10 @@
                                 <div class="has-feedback">
                                   		状态：<select ng-model="searchEntity.auditStatus">
                                          	<option value="">全部</option>      
-                                         	<option value="0">未申请</option>    
+                                         	<option value="0">未审核</option>
                                          	<option value="1">审核通过</option>    
                                          	<option value="2">审核未通过</option>    
-                                         	<option value="3">关闭</option>                                     
+                                         	<option value="3">未申请</option>
                                         </select>
 							                  商品名称：<input type="text" ng-model="searchEntity.goodsName">									
 									<button class="btn btn-default" ng-click="reloadList()">查询</button>                                    
@@ -102,8 +103,9 @@
 		                                  	</span>
 		                                  </td>		                                  
 		                                  <td class="text-center">
-		                                  	  <a class="btn bg-olive btn-xs" href="goods_edit.html#?id={{entity.id}}">修改</a>                                
-		                                  </td>
+		                                  	  <a class="btn bg-olive btn-xs" href="goods_edit.html#?id={{entity.id}}">修改</a>
+                                              <a class="btn bg-olive btn-xs" href="seckill_goods_edit.html#?id={{entity.id}}">秒杀申请</a>
+                                          </td>
 			                          </tr>
 			                      </tbody>
 			                  </table>

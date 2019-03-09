@@ -11,7 +11,7 @@ public interface BrandService {
     //查询所有
     List<Brand> queryAll();
     //分页查询
-    PageResult findPage(Integer page,Integer rows);
+  /*  PageResult findPage(Integer page,Integer rows);*/
     //新增品牌
     void add(Brand brand);
     //查询一条

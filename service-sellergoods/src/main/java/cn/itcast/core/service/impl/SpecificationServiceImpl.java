@@ -33,27 +33,33 @@ public class SpecificationServiceImpl implements SpecificationService {
     public List<Specification> queryAll() {
         return specificationDao.selectByExample(null);
     }
+
     //分页查询
     @Override
     public PageResult findPage(Integer page, Integer rows) {
-        PageHelper.startPage(page,rows);
-        Page<Specification> specificationPage = (Page<Specification>)specificationDao.selectByExample(null);
-        PageResult pageResult = new PageResult(specificationPage.getTotal(),specificationPage.getResult());
+        PageHelper.startPage(page, rows);
+        Page<Specification> specificationPage = (Page<Specification>) specificationDao.selectByExample(null);
+        PageResult pageResult = new PageResult(specificationPage.getTotal(), specificationPage.getResult());
         return pageResult;
     }
+
     //新增品牌
     @Override
     public void add(Spec spec) {
         Specification specification = spec.getSpecification();
         //先保存规格对象
+        //设置未申请状态
+        specification.setStat("0");
         specificationDao.insert(specification);
         //保存规格选项对象
         List<SpecificationOption> specificationOptionList = spec.getSpecificationOptionList();
         for (SpecificationOption specificationOption : specificationOptionList) {
+            specificationOption.setStat("0");
             specificationOption.setSpecId(specification.getId());
             specificationOptionDao.insertSelective(specificationOption);
         }
     }
+
     //查询一条
     @Override
     public Spec findOne(Long id) {
@@ -65,6 +71,7 @@ public class SpecificationServiceImpl implements SpecificationService {
         spec.setSpecificationOptionList(specificationOptionDao.selectByExample(query));
         return spec;
     }
+
     //更新品牌
     @Override
     public void update(Spec spec) {
@@ -84,6 +91,7 @@ public class SpecificationServiceImpl implements SpecificationService {
             specificationOptionDao.insertSelective(specificationOption);
         }
     }
+
     //批量删除
     @Override
     public void delete(Long[] ids) {
@@ -97,19 +105,44 @@ public class SpecificationServiceImpl implements SpecificationService {
             specificationOptionDao.deleteByExample(query);
         }
     }
+
+    //批量提交申请
+    @Override
+    public void updateStat(Long[] ids) {
+        for (Long id : ids) {
+            //先提交规格对象
+            Specification specification = specificationDao.selectByPrimaryKey(id);
+            specification.setStat("1");
+            specificationDao.updateByPrimaryKeySelective(specification);
+
+            //并且删除掉当前规格下的规格选项
+            SpecificationOptionQuery query = new SpecificationOptionQuery();
+            SpecificationOptionQuery.Criteria criteria = query.createCriteria();
+            criteria.andSpecIdEqualTo(id);
+            List<SpecificationOption> specificationOptions = specificationOptionDao.selectByExample(query);
+            for (SpecificationOption specificationOption : specificationOptions) {
+                specificationOption.setStat("1");
+                specificationOptionDao.updateByPrimaryKey(specificationOption);
+            }
+        }
+    }
+
     //多条件分页查询
     @Override
     public PageResult search(Integer page, Integer rows, Specification specification) {
         SpecificationQuery query = new SpecificationQuery();
         SpecificationQuery.Criteria criteria = query.createCriteria();
-        if(specification != null){
-            if(specification.getSpecName() != null && !"".equals(specification.getSpecName())){
-                criteria.andSpecNameLike("%"+specification.getSpecName()+"%");
+        if (specification != null) {
+            if (specification.getSpecName() != null && !"".equals(specification.getSpecName())) {
+                criteria.andSpecNameLike("%" + specification.getSpecName() + "%");
+            }
+            if (specification.getStat() != null && !"".equals(specification.getStat())) {
+                criteria.andStatEqualTo(specification.getStat());
             }
         }
         PageHelper.startPage(page, rows);
         Page<Specification> specificationPage = (Page<Specification>) specificationDao.selectByExample(query);
-        return new PageResult(specificationPage.getTotal(),specificationPage.getResult());
+        return new PageResult(specificationPage.getTotal(), specificationPage.getResult());
     }
 
     @Override

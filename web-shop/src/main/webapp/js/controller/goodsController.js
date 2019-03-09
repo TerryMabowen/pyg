@@ -1,5 +1,5 @@
 //控制层
-app.controller('goodsController', function ($scope, $controller, $location, typeTemplateService, itemCatService, uploadService, goodsService) {
+app.controller('goodsController', function ($scope, $controller, $location, shop_typeTemplateService, shop_itemCatService, seckill_goodsService, uploadService, goodsService) {
 
     $controller('baseController', {$scope: $scope});//继承
 
@@ -89,6 +89,26 @@ app.controller('goodsController', function ($scope, $controller, $location, type
         );
     }
 
+    //秒杀申请保存
+    $scope.seckill_save = function () {
+        var serviceObject;//服务层对象
+
+        serviceObject = seckill_goodsService.add($scope.entity);//增加
+
+        serviceObject.success(
+            function (response) {
+                if (response.success) {
+                    //重新查询
+                    alert(response.message);
+                    $scope.entity = {};
+                    editor.html("");
+                    location.href = "goods.html";
+                } else {
+                    alert(response.message);
+                }
+            }
+        );
+    }
 
     //批量删除
     $scope.dele = function () {
@@ -102,6 +122,20 @@ app.controller('goodsController', function ($scope, $controller, $location, type
             }
         );
     }
+
+    //批量提交审核
+    $scope.updateStat = function () {
+        //获取选中的复选框
+        goodsService.updateStat($scope.selectIds).success(
+            function (response) {
+                if (response.success) {
+                    $scope.reloadList();//刷新列表
+                    $scope.selectIds = [];
+                }
+            }
+        );
+    }
+
 
     $scope.searchEntity = {};//定义搜索对象
 
@@ -129,9 +163,34 @@ app.controller('goodsController', function ($scope, $controller, $location, type
         });
     }
 
-    // 获得了image_entity的实体的数据{"color":"褐色","url":"http://192.168.209.132/group1/M00/00/00/wKjRhFn1bH2AZAatAACXQA462ec665.jpg"}
-    $scope.entity = {goods: {}, goodsDesc: {itemImages: [], specificationItems: []}};
 
+    $scope.uploadFile2 = function () {
+        // 调用uploadService的方法完成文件的上传
+        uploadService.uploadFile().success(function (response) {
+            if (response.success) {
+                // 获得url
+                $scope.entity.seckillGoods.smallPic = response.message;
+            } else {
+                alert(response.message);
+            }
+        });
+    }
+
+    // 获得了image_entity的实体的数据{"color":"褐色","url":"http://192.168.209.132/group1/M00/00/00/wKjRhFn1bH2AZAatAACXQA462ec665.jpg"}
+
+    /*$scope.entity = {goods: {},seckillGoods:{} };
+
+    $scope.add_entity = function () {
+        $scope.entity.seckillGoods.introduction.push($scope.entity.seckillGoods.introduction);
+    }
+
+    $scope.remove_entity = function (index) {
+        $scope.entity.seckillGoods.introduction.splice(index, 1);
+        $scope.entity.seckillGoods.smallPic.splice(index, 1);
+    }*/
+
+
+    $scope.entity = {goods: {}, goodsDesc: {itemImages: [], specificationItems: []}};
     $scope.add_image_entity = function () {
         $scope.entity.goodsDesc.itemImages.push($scope.image_entity);
     }
@@ -140,30 +199,31 @@ app.controller('goodsController', function ($scope, $controller, $location, type
         $scope.entity.goodsDesc.itemImages.splice(index, 1);
     }
 
+
     // 查询一级分类列表:
     $scope.selectItemCat1List = function () {
-        itemCatService.findByParentId(0).success(function (response) {
+        shop_itemCatService.findByParentId(0).success(function (response) {
             $scope.itemCat1List = response;
         });
     }
 
     // 查询二级分类列表:
     $scope.$watch("entity.goods.category1Id", function (newValue, oldValue) {
-        itemCatService.findByParentId(newValue).success(function (response) {
+        shop_itemCatService.findByParentId(newValue).success(function (response) {
             $scope.itemCat2List = response;
         });
     });
 
     // 查询三级分类列表:
     $scope.$watch("entity.goods.category2Id", function (newValue, oldValue) {
-        itemCatService.findByParentId(newValue).success(function (response) {
+        shop_itemCatService.findByParentId(newValue).success(function (response) {
             $scope.itemCat3List = response;
         });
     });
 
     // 查询模块ID
     $scope.$watch("entity.goods.category3Id", function (newValue, oldValue) {
-        itemCatService.findOne(newValue).success(function (response) {
+        shop_itemCatService.findOne(newValue).success(function (response) {
             $scope.entity.goods.typeTemplateId = response.typeId;
         });
     });
@@ -171,7 +231,7 @@ app.controller('goodsController', function ($scope, $controller, $location, type
     // 查询模板下的品牌列表:
     $scope.$watch("entity.goods.typeTemplateId", function (newValue, oldValue) {
         // 根据模板ID查询模板的数据
-        typeTemplateService.findOne(newValue).success(function (response) {
+        shop_typeTemplateService.findOne(newValue).success(function (response) {
             $scope.typeTemplate = response;
             // 将品牌的字符串数据转成JSON
             $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);
@@ -184,7 +244,7 @@ app.controller('goodsController', function ($scope, $controller, $location, type
         });
 
         // 根据模板ID获得规格的列表的数据：
-        typeTemplateService.findBySpecList(newValue).success(function (response) {
+        shop_typeTemplateService.findBySpecList(newValue).success(function (response) {
             $scope.specList = response;
         });
     });
@@ -243,13 +303,13 @@ app.controller('goodsController', function ($scope, $controller, $location, type
         return newList;
     }
 
-    // 显示状态
-    $scope.status = ["未审核", "审核通过", "审核未通过", "关闭"];
+    // 显示状态 0-已申请 1-审核通过 2-审核未通过 3-未申请
+    $scope.status = ["未审核", "审核通过", "审核未通过", "未申请"];
 
     $scope.itemCatList = [];
     // 显示分类:
     $scope.findItemCatList = function () {
-        itemCatService.findAll().success(function (response) {
+        shop_itemCatService.findAll().success(function (response) {
             for (var i = 0; i < response.length; i++) {
                 $scope.itemCatList[response[i].id] = response[i].name;
             }
