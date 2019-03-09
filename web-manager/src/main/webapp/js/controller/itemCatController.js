@@ -46,6 +46,21 @@ app.controller('itemCatController',function ($scope,itemCatService,$controller) 
         )
     }*/
 
+
+    //上传excel表格解析
+    $scope.uploadExcel = function () {
+        // 调用uploadService的方法完成文件的上传
+        itemCatService.uploadExcel().success(function (response) {
+            if (response.success == true) {
+                alert(response.message)
+                $scope.reloadList();//重新加载
+            } else {
+                alert(response.message);
+            }
+        });
+    }
+
+
     //保存
     $scope.save=function () {
         //方法名称
@@ -102,16 +117,13 @@ app.controller('itemCatController',function ($scope,itemCatService,$controller) 
     //定义一个查询条件对象
     $scope.searchEntity={};
     //条件查询
-   /* $scope.search=function (page,rows) {
+    $scope.search=function (page,rows) {
         itemCatService.search(page,rows,$scope.searchEntity).success(
             function (response) {
                 $scope.list=response.rows;
                 $scope.paginationConf.totalItems=response.total;//更新总记录数
             }
         )
-    }*/
-    $scope.search=function () {
-
     }
 
     //根据上级ID查询商品分类列表
@@ -124,5 +136,20 @@ app.controller('itemCatController',function ($scope,itemCatService,$controller) 
                 $scope.itemCatList = response;
             }
         )
+    }
+
+    // 显示状态
+    $scope.status = ["未申请","未审核","审核通过","已驳回"];
+
+    // 审核的方法:
+    $scope.updateStatus = function(status){
+        itemCatService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.success){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];//清空id集合
+            }else{
+                alert(response.message);
+            }
+        });
     }
 })

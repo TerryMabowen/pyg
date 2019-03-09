@@ -56,6 +56,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
     //新增品牌
     @Override
     public void add(TypeTemplate typeTemplate) {
+        typeTemplate.setStat(Constants.YI_SHEN_HE);
         typeTemplateDao.insertSelective(typeTemplate);
     }
 
@@ -110,7 +111,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             if (typeTemplate.getName() != null && !"".equals(typeTemplate.getName())) {
                 criteria.andNameLike("%" + typeTemplate.getName() + "%");
             }
-
+            if(typeTemplate.getStat()!=null){
+                criteria.andStatEqualTo(typeTemplate.getStat());
+            }
         }
         PageHelper.startPage(page, rows);
         Page<TypeTemplate> typeTemplatePage = (Page<TypeTemplate>) typeTemplateDao.selectByExample(query);
@@ -147,5 +150,17 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             }
         }
         return specList;
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        if(ids!=null&&ids.length>0){
+            for (Long id : ids) {
+                TypeTemplate typeTemplate = new TypeTemplate();
+                typeTemplate.setId(id);
+                typeTemplate.setStat("1");
+                typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
+            }
+        }
     }
 }

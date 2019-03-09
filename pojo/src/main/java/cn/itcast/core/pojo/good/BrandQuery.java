@@ -313,6 +313,76 @@ public class BrandQuery {
             addCriterion("first_char not between", value1, value2, "firstChar");
             return (Criteria) this;
         }
+
+        public Criteria andStatIsNull() {
+            addCriterion("stat is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatIsNotNull() {
+            addCriterion("stat is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatEqualTo(String value) {
+            addCriterion("stat =", value, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatNotEqualTo(String value) {
+            addCriterion("stat <>", value, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatGreaterThan(String value) {
+            addCriterion("stat >", value, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatGreaterThanOrEqualTo(String value) {
+            addCriterion("stat >=", value, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatLessThan(String value) {
+            addCriterion("stat <", value, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatLessThanOrEqualTo(String value) {
+            addCriterion("stat <=", value, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatLike(String value) {
+            addCriterion("stat like", value, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatNotLike(String value) {
+            addCriterion("stat not like", value, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatIn(List<String> values) {
+            addCriterion("stat in", values, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatNotIn(List<String> values) {
+            addCriterion("stat not in", values, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatBetween(String value1, String value2) {
+            addCriterion("stat between", value1, value2, "stat");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatNotBetween(String value1, String value2) {
+            addCriterion("stat not between", value1, value2, "stat");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

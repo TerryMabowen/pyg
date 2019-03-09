@@ -2,6 +2,7 @@ package cn.itcast.core.dao.good;
 
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
+
 import java.util.List;
 import java.util.Map;
 
@@ -32,4 +33,7 @@ public interface BrandDao {
 
     //获取品牌列表数据格式是封装的map对象
     List<Map> selectOptionList();
+
+    //根据excel表传入的name查询到对应的信息 以Map形式返回
+    Map<String,String> selectOptionListByName(@Param("name") String name);
 }
