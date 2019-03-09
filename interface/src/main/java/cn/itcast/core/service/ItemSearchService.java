@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-@Repository
+
 public interface ItemSearchService {
     //根据关键字(多关键字),分类,品牌,规格,价格区间,排序搜索商品
     Map<String ,Object> search(Map searchMap);

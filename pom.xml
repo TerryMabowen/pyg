@@ -46,6 +46,8 @@
         <module>web-shop</module>
         <module>web-portal</module>
         <module>web-user</module>
+        <module>web-seckill</module>
+        <module>service-seckill</module>
     </modules>
 
     <dependencyManagement>

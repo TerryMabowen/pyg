@@ -25,6 +25,8 @@ public class TypeTemplate implements Serializable {
      */
     private String customAttributeItems;
 
+    private String stat;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -67,6 +69,14 @@ public class TypeTemplate implements Serializable {
         this.customAttributeItems = customAttributeItems == null ? null : customAttributeItems.trim();
     }
 
+    public String getStat() {
+        return stat;
+    }
+
+    public void setStat(String stat) {
+        this.stat = stat == null ? null : stat.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -78,6 +88,7 @@ public class TypeTemplate implements Serializable {
         sb.append(", specIds=").append(specIds);
         sb.append(", brandIds=").append(brandIds);
         sb.append(", customAttributeItems=").append(customAttributeItems);
+        sb.append(", stat=").append(stat);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -99,7 +110,8 @@ public class TypeTemplate implements Serializable {
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getSpecIds() == null ? other.getSpecIds() == null : this.getSpecIds().equals(other.getSpecIds()))
             && (this.getBrandIds() == null ? other.getBrandIds() == null : this.getBrandIds().equals(other.getBrandIds()))
-            && (this.getCustomAttributeItems() == null ? other.getCustomAttributeItems() == null : this.getCustomAttributeItems().equals(other.getCustomAttributeItems()));
+            && (this.getCustomAttributeItems() == null ? other.getCustomAttributeItems() == null : this.getCustomAttributeItems().equals(other.getCustomAttributeItems()))
+            && (this.getStat() == null ? other.getStat() == null : this.getStat().equals(other.getStat()));
     }
 
     @Override
@@ -111,6 +123,7 @@ public class TypeTemplate implements Serializable {
         result = prime * result + ((getSpecIds() == null) ? 0 : getSpecIds().hashCode());
         result = prime * result + ((getBrandIds() == null) ? 0 : getBrandIds().hashCode());
         result = prime * result + ((getCustomAttributeItems() == null) ? 0 : getCustomAttributeItems().hashCode());
+        result = prime * result + ((getStat() == null) ? 0 : getStat().hashCode());
         return result;
     }
 }

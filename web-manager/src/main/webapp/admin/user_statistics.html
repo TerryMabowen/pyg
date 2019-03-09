@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>用户统计</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--引入angularjs核心包-->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="../js/echarts.js"></script>
+
+    <script type="text/javascript">
+        var app = angular.module('pinyougou', []);//定义模块
+        app.controller('user_statisticsController', function ($scope, $http) {
+            //读取列表数据绑定到表单中
+            $scope.findAll = function () {
+                $http.get('../user/findAll.do').success(
+                    function (response) {
+                        $scope.list = response;
+                    }
+                );
+            }
+        });
+    </script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini"
+      ng-app="pinyougou" ng-controller="user_statisticsController" ng-init="findAll()"> <!--ng-init="findAll()"-->
+<!-- .box-body -->
+<div class="box-header with-border">
+    <h3 class="box-title">用户统计</h3>
+</div>
+
+<div class="box-body">
+    <!-- 数据表格 -->
+    <div class="table-box">
+        <!--数据列表-->
+        <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+            <thead>
+            <tr>
+                <th class="" style="padding-right:0px">
+                    <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                </th>
+                <th class="sorting_asc">总人数</th>
+                <th class="sorting">男占比</th>
+                <th class="sorting">PC</th>
+                <th class="sorting">H5</th>
+                <th class="sorting">Android</th>
+                <th class="sorting">IOS</th>
+                <th class="sorting">微信</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="entity in list">
+                <td><input type="checkbox" ng-click="updateSelection($event, entity.id)"></td>
+                <td>{{entity.userTotal}}</td>
+                <td>{{entity.proportion}}</td>
+                <td>{{entity.pc}}</td>
+                <td>{{entity.h5}}</td>
+                <td>{{entity.android}}</td>
+                <td>{{entity.ios}}</td>
+                <td>{{entity.wechat}}</td>
+                <td class="text-center">
+                    <button ng-click="findOne(entity.id)" type="button" class="btn bg-olive btn-xs" data-toggle="modal"
+                            data-target="#editModal">修改
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="view01" style="width:700px; height: 350px;"></div>
+    <script>
+        var view01 = document.getElementById("view01");
+        var myChart = echarts.init(view01);
+        option = {
+            xAxis: {
+                type: 'category',
+                data: ['PC','H5', 'Android', 'IOS', 'wechat']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [3, 4, 2, 3, 5],
+                type: 'line'
+            }]
+        };
+        myChart.setOption(option);
+    </script>
+
+</div>
+</body>
+</html>

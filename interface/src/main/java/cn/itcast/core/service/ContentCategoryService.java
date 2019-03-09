@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface ContentCategoryService {
     //查询所有
     List<ContentCategory> queryAll();
@@ -21,5 +21,8 @@ public interface ContentCategoryService {
     void delete(Long[] ids);
     //多条件分页查询
     PageResult search(Integer page, Integer rows, ContentCategory contentCategory);
+
+    ContentCategory findAllById(String floor);
+
 
 }

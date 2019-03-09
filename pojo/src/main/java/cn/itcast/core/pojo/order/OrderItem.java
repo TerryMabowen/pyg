@@ -6,6 +6,16 @@ import java.math.BigDecimal;
 public class OrderItem implements Serializable {
     private Long id;
 
+    private String idStr;
+
+    public String getIdStr() {
+        return id+"";
+    }
+
+    public void setIdStr(String idStr) {
+        this.idStr = idStr;
+    }
+
     /**
      * 商品id
      */
@@ -20,6 +30,8 @@ public class OrderItem implements Serializable {
      * 订单id
      */
     private Long orderId;
+
+    //解决由于数据库long整形过长,导致前端现实的数字后两位00的情况
     private String orderIdStr;
 
     public String getOrderIdStr() {
@@ -29,6 +41,7 @@ public class OrderItem implements Serializable {
     public void setOrderIdStr(String orderIdStr) {
         this.orderIdStr = orderIdStr;
     }
+
     /**
      * 商品标题
      */

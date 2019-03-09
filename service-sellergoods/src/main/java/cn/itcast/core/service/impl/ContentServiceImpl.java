@@ -3,6 +3,7 @@ package cn.itcast.core.service.impl;
 
 import cn.itcast.core.dao.ad.ContentDao;
 import cn.itcast.core.pojo.ad.Content;
+import cn.itcast.core.pojo.ad.ContentCategory;
 import cn.itcast.core.pojo.ad.ContentQuery;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.service.ContentService;
@@ -107,5 +108,16 @@ public class ContentServiceImpl implements ContentService {
             return contentList;
         }
     }
+
+    @Override
+    public List<Content> findNameById(String floor) {
+        long l = Long.parseLong(floor);
+        ContentQuery contentQuery = new ContentQuery();
+        ContentQuery.Criteria criteria = contentQuery.createCriteria();
+        criteria.andCategoryIdEqualTo(l);
+        List<Content> contentList = contentDao.selectByExample(contentQuery);
+        return contentList;
+    }
+
 
 }

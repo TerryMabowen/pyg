@@ -1,10 +1,7 @@
 package cn.itcast.core.pojo.good;
 
-import cn.itcast.core.pojo.item.Item;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 public class Goods implements Serializable {
     /**

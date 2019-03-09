@@ -73,5 +73,4 @@ public class ContentController {
         PageResult pageResult = contentService.search(page, rows, content);
         return pageResult;
     }
-
 }

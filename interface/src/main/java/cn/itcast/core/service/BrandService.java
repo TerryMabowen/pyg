@@ -2,11 +2,10 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.good.Brand;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-@Repository
+
 public interface BrandService {
     //查询所有
     List<Brand> queryAll();
@@ -24,6 +23,9 @@ public interface BrandService {
     PageResult search(Integer page,Integer rows,Brand brand);
     //获取品牌列表数据格式是封装的map对象
     List<Map> selectOptionList();
+
+    //修改状态
+    void updateStatus(Long[] ids, String status);
 
 
 

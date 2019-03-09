@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface ContentService {
     //查询所有
     List<Content> queryAll();
@@ -24,5 +24,9 @@ public interface ContentService {
     List<Content> findByCategoryId(Long categoryId);
     //从Redis查询
     List<Content> findByCategoryIdFromRedis(Long categoryId);
+
+    List<Content> findNameById(String floor);
+
+
 
 }

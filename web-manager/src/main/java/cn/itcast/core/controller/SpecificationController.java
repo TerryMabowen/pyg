@@ -82,4 +82,17 @@ public class SpecificationController {
         List<Map> maps = specificationService.selectOptionList();
         return maps;
     }
+    //修改状态
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long [] ids ,String status){
+        try {
+            if(ids!=null&&ids.length>0){
+                specificationService.updateStatus(ids,status);
+            }
+            return new Result(true,"修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"修改失败");
+        }
+    }
 }

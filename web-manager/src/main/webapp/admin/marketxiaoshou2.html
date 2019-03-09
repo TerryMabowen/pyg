@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>销售饼状图</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../js/markst/echarts.min.js"></script>
+    <!--引入angularjs核心包-->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/service/orderItemService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/orderItemController.js"></script>
+</head>
+
+<body>
+<!-- .box-body -->
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">销售饼状图</h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+
+            <div class="box-tools pull-left">
+                <div class="has-feedback">
+                    <h4>不同品牌下的销售额</h4>
+                </div>
+                <div id="view01" style="width:500px; height: 400px;"></div>
+            </div>
+            <script>
+                /* <%--1.获取目标对象引用--%>*/
+                var view01 = document.getElementById("view01");
+                /*<%--2.echarts初始化--%>*/
+                var myChart = echarts.init(view01);
+                /*  <%--3.设置配置项和数据--%>*/
+                option = {
+                    title: {
+                        text: '',
+                        subtext: '品优购',
+                        x: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        type: 'scroll',
+                        orient: 'vertical',
+                        right: 10,
+                        top: 20,
+                        bottom: 20,
+                        data: [],
+
+                        selected: {}
+                    },
+                    series: [
+                        {
+                            name: '品牌',
+                            type: 'pie',
+                            radius: '90%',
+                            center: ['50%', '50%'],
+                            data: [].sort(function (a, b) {
+                                return a.value - b.value;
+                            }),
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+                /*<%--4.显示图表:建立echarts和配置项与数据的关系 --%>*/
+                myChart.setOption(option);
+                // 异步加载数据
+                var url = "../market/showSalesMoney.do";
+                var arrNum = [];
+                $.get(url).done(function (data) {
+                    var obj = data.brandNameList;
+                    var objNum = data.totalMoneyList;
+                    for (var i = 0; i < obj.length; i++) {
+                        // 填入数据
+                        arrNum.push({value: objNum[i], name: obj[i]})
+                    }
+                    myChart.setOption({
+                        series: [
+                            {
+                                data: arrNum
+                            }
+                        ]
+                    });
+                });
+            </script>
+
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>
