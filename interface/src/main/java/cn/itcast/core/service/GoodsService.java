@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface GoodsService {
     //添加商品
     void add(GoodsEntity goodsEntity);
@@ -25,7 +25,22 @@ public interface GoodsService {
     //删除(逻辑删除,并不是真的在数据库中删除,只是在页面上不显示)
     void delete(Long[] ids);
 
+    //上架
+    void upShelf(Long[] ids);
+
+    //下架
+    void downShelf(Long[] ids);
+
+    //上架功能查询商品列表
+    public List<Goods> findGoodsForUpShelf(String sellerId);
+
+    //下架功能查询商品列表
+    public List<Goods> findGoodsForDownShelf(String sellerId);
+
+
     //批量修改状态
     void updateStatus(Long[] ids, String status);
+
+
 
 }

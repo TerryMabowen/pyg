@@ -24,11 +24,18 @@ app.service('itemCatService', function ($http) {
         return $http.get('../itemCat/delete.do?ids=' + ids);
     }
     //条件查询带分页
+    this.search=function (page, rows, searchEntity) {
+        return $http.post('../itemCat/search.do?page='+page+'&rows='+rows,searchEntity);
+    }
     this.search = function (page, rows, searchEntity) {
         return $http.post('../itemCat/search.do?page=' + page + '&rows=' + rows, searchEntity);
     }
     //根据上级ID查询商品分类列表
     this.findByParentId = function (parentId) {
         return $http.get('../itemCat/findByParentId.do?parentId=' + parentId);
+    }
+    //修改状态
+    this.updateStatus = function(ids,status){
+        return $http.get('../itemCat/updateStatus.do?ids='+ids+"&status="+status);
     }
 })

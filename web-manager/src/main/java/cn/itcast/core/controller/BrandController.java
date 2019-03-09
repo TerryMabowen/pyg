@@ -3,9 +3,9 @@ package cn.itcast.core.controller;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.good.Brand;
+import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.service.BrandService;
 import com.alibaba.dubbo.config.annotation.Reference;
-import org.omg.SendingContext.RunTime;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,5 +81,18 @@ public class BrandController {
         List<Map> maps = brandService.selectOptionList();
         System.out.println(maps);
         return maps;
+    }
+    //修改状态
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+        try {
+            if (ids != null) {
+                brandService.updateStatus(ids, status);
+            }
+            return new Result(true, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "修改失败");
+        }
     }
 }

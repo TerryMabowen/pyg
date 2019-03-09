@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface CartService {
     //添加商品到购物车(/addGoodsToCartList)
      List<BuyerCart> addGoodsToCartList(List<BuyerCart> cartList,Long itemId,Integer num);

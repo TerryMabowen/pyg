@@ -3,7 +3,7 @@ package cn.itcast.core.service;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
-@Repository
+
 public interface PageService {
     //利用freemarker生成商品详情页
     void createGoodsHtml(Long goodsId,Map<String,Object> rootMap) throws Exception;

@@ -17,6 +17,8 @@ public class Specification implements Serializable {
      */
     private String stat;
 
+    private String stat;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {

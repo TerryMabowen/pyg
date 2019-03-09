@@ -79,4 +79,20 @@ public class TypeTemplateController {
         PageResult pageResult = typeTemplateService.search( typeTemplate,page, rows);
         return pageResult;
     }
+
+    //模板审批
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long [] ids ,String status){
+        try {
+            System.out.println(ids);
+            System.out.println(status);
+            if(ids!=null&&ids.length>0){
+                typeTemplateService.updateStatus(ids,status);
+            }
+            return new Result(true,"修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"修改失败");
+        }
+    }
 }

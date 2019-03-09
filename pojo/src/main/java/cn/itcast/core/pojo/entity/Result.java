@@ -28,5 +28,4 @@ public class Result implements Serializable{
 		this.message = message;
 	}
 
-	
 }

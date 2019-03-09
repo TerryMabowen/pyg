@@ -3,6 +3,8 @@ package cn.itcast.core.controller;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.good.Goods;
+import cn.itcast.core.pojo.item.Item;
+import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.service.GoodsService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,8 @@ public class GoodsController {
 
     @Reference
     private GoodsService goodsService;
+
+
 
 //    @Reference
 //    private SolrManagerService solrManagerService;

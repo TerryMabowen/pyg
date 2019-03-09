@@ -14,9 +14,8 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ContentCategoryServiceImpl implements ContentCategoryService {
@@ -65,5 +64,13 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
         Page<ContentCategory> contentCategoryPage = (Page<ContentCategory>) contentCategoryDao.selectByExample(query);
         return new PageResult(contentCategoryPage.getTotal(),contentCategoryPage.getResult());
     }
+
+    @Override
+    public ContentCategory findAllById(String floor) {
+        long h = Long.parseLong(floor);
+        ContentCategory contentCategory = contentCategoryDao.selectByPrimaryKey(h);
+        return contentCategory;
+    }
+
 
 }

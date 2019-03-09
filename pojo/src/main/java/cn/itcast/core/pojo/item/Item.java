@@ -96,12 +96,12 @@ public class Item implements Serializable {
 
     @Field("item_seller")
     private String seller;
-    
-    
+
+
     @Dynamic
     @Field("item_spec_*")
     private Map<String,String> specMap;
-    
+
     public Map<String, String> getSpecMap() {
 		return specMap;
 	}
@@ -109,8 +109,8 @@ public class Item implements Serializable {
 	public void setSpecMap(Map<String, String> specMap) {
 		this.specMap = specMap;
 	}
-    
-    
+
+
 
     private static final long serialVersionUID = 1L;
 

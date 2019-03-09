@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:amq="http://activemq.apache.org/schema/core"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:amq="http://activemq.apache.org/schema/core"
 	xmlns:jms="http://www.springframework.org/schema/jms"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans   
 		http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -30,5 +33,18 @@
 		<property name="messageListener" ref="pageListener" />
 	</bean>
 	<bean id="pageListener" class="cn.itcast.core.listener.PageListener"></bean>
+
+
+	<!--这些是上架生成页面-->
+	<bean id="topicPageAndSolrDestination2" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg value="pinyougou_topic_page_solr2"/>
+	</bean>
+
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="topicPageAndSolrDestination2" />
+		<property name="messageListener" ref="pageListener2" />
+	</bean>
+	<bean id="pageListener2" class="cn.itcast.core.listener.PageListener2"></bean>
 	
 </beans>

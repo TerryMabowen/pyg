@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="first_char" property="firstChar" jdbcType="VARCHAR" />
+    <result column="stat" property="stat" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +67,7 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, name, first_char
+      id, name, first_char, stat
     </if>
     <if test="fields != null" >
       ${fields}
@@ -88,7 +89,9 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
-    id,name,first_char
+    id,name,first_char,stat
+    select
+    id,name,first_char,stat
     from tb_brand
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -103,10 +106,15 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.itcast.core.pojo.good.Brand" >
-    insert into tb_brand (id, name, first_char
-      )
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR}
-      )
+    insert into tb_brand (id, name, first_char,
+      stat)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR},
+      #{stat,jdbcType=VARCHAR})
+
+    insert into tb_brand (id, name, first_char,
+    stat)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR},
+    #{stat,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.itcast.core.pojo.good.Brand" >
     insert into tb_brand
@@ -120,6 +128,9 @@
       <if test="firstChar != null" >
         first_char,
       </if>
+      <if test="stat != null" >
+        stat,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -130,6 +141,12 @@
       </if>
       <if test="firstChar != null" >
         #{firstChar,jdbcType=VARCHAR},
+      </if>
+      <if test="stat != null" >
+        #{stat,jdbcType=VARCHAR},
+      </if>
+      <if test="stat != null" >
+        #{stat,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -151,6 +168,9 @@
       <if test="record.firstChar != null" >
         first_char = #{record.firstChar,jdbcType=VARCHAR},
       </if>
+      <if test="record.stat != null" >
+        stat = #{record.stat,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -160,7 +180,11 @@
     update tb_brand
     set id = #{record.id,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
-      first_char = #{record.firstChar,jdbcType=VARCHAR}
+      first_char = #{record.firstChar,jdbcType=VARCHAR},
+      stat = #{record.stat,jdbcType=VARCHAR}
+    name = #{record.name,jdbcType=VARCHAR},
+    first_char = #{record.firstChar,jdbcType=VARCHAR},
+    stat = #{record.stat,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -174,17 +198,27 @@
       <if test="firstChar != null" >
         first_char = #{firstChar,jdbcType=VARCHAR},
       </if>
+      <if test="stat != null" >
+        stat = #{stat,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.itcast.core.pojo.good.Brand" >
     update tb_brand
     set name = #{name,jdbcType=VARCHAR},
-      first_char = #{firstChar,jdbcType=VARCHAR}
+      first_char = #{firstChar,jdbcType=VARCHAR},
+      stat = #{stat,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <!--获取品牌列表数据格式是封装的map对象-->
+
   <select id="selectOptionList" resultType="java.util.Map">
-    select id,name as text from tb_brand
+    select id, name text from tb_brand
   </select>
+
+  <!--根据excel表传入的name查询到对应的信息 以Map形式返回-->
+  <select id="selectOptionListByName" resultType="java.util.Map">
+    select id,name as text from tb_brand where name =#{name,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

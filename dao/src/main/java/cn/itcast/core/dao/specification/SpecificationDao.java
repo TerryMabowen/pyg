@@ -2,6 +2,7 @@ package cn.itcast.core.dao.specification;
 
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationQuery;
+
 import java.util.List;
 import java.util.Map;
 
@@ -32,4 +33,7 @@ public interface SpecificationDao {
 
     //获取规格列表数据格式是封装的map对象
     List<Map> selectOptionList();
+
+    //获取规格列表封装成Map对象返回
+    Map<String,String> selectOptionListBySpecName(@Param("specName") String specName);
 }

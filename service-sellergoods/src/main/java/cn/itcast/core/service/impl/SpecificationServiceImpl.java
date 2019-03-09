@@ -10,6 +10,7 @@ import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
 import cn.itcast.core.pojo.specification.SpecificationQuery;
 import cn.itcast.core.service.SpecificationService;
+import cn.itcast.core.util.Constants;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -47,6 +48,7 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public void add(Spec spec) {
         Specification specification = spec.getSpecification();
+        specification.setStat(Constants.YI_SHEN_HE);
         //先保存规格对象
         //设置未申请状态
         specification.setStat("0");
@@ -139,6 +141,9 @@ public class SpecificationServiceImpl implements SpecificationService {
             if (specification.getStat() != null && !"".equals(specification.getStat())) {
                 criteria.andStatEqualTo(specification.getStat());
             }
+            if(specification.getStat()!=null){
+                criteria.andStatEqualTo(specification.getStat());
+            }
         }
         PageHelper.startPage(page, rows);
         Page<Specification> specificationPage = (Page<Specification>) specificationDao.selectByExample(query);
@@ -149,5 +154,17 @@ public class SpecificationServiceImpl implements SpecificationService {
     public List<Map> selectOptionList() {
         List<Map> maps = specificationDao.selectOptionList();
         return maps;
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        if(ids!=null&&ids.length>0){
+            for (Long id : ids) {
+                Specification specification = new Specification();
+                specification.setId(id);
+                specification.setStat(status);
+                specificationDao.updateByPrimaryKeySelective(specification);
+            }
+        }
     }
 }

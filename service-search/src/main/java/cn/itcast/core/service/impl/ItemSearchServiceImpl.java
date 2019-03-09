@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,35 +63,37 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
         return map;
     }
+
     //将运营商通过审核的商品集合添加到solr库中
     @Override
-    public void importList(Long goodsId,String status) {
+    public void importList(Long goodsId, String status) {
         ItemQuery query = new ItemQuery();
         ItemQuery.Criteria criteria = query.createCriteria();
-        if(goodsId != null){
+        if (goodsId != null) {
             criteria.andGoodsIdEqualTo(goodsId);
             criteria.andStatusEqualTo(status);
         }
         List<Item> itemList = itemDao.selectByExample(query);
         //解析规格
-        if(itemList != null && itemList.size() > 0){
+        if (itemList != null && itemList.size() > 0) {
             for (Item item : itemList) {
                 String specJsonStr = item.getSpec();
-                Map<String,String> maps = JSON.parseObject(specJsonStr, Map.class);
+                Map<String, String> maps = JSON.parseObject(specJsonStr, Map.class);
                 item.setSpecMap(maps);
             }
             solrTemplate.saveBeans(itemList);
             solrTemplate.commit();
         }
     }
+
     //将商家删除的商品数据从solr库中删除
     @Override
     public void deleteList(Long goodsId) {
-            Query query = new SimpleQuery();
-            Criteria criteria = new Criteria("item_goodsid").is(goodsId);
-            query.addCriteria(criteria);
-            solrTemplate.delete(query);
-            solrTemplate.commit();
+        Query query = new SimpleQuery();
+        Criteria criteria = new Criteria("item_goodsid").is(goodsId);
+        query.addCriteria(criteria);
+        solrTemplate.delete(query);
+        solrTemplate.commit();
 
     }
 
@@ -107,7 +110,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //获取用户选中的品牌名称
         String brand = (String) searchMap.get("brand");
         //获取用户选中的规格名称
-        Map<String,String> specMap = (Map<String,String>) searchMap.get("spec");
+        Map<String, String> specMap = (Map<String, String>) searchMap.get("spec");
         //获取用户选中的价格区间字符串
         String priceStr = (String) searchMap.get("price");
         //获取用户选中的排序的字段(价格?销量?评论....)
@@ -135,10 +138,10 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         query.setHighlightOptions(options);
 
         //分页设置
-        if(pageNo != null || pageNo <= 0){
+        if (pageNo != null || pageNo <= 0) {
             pageNo = 1;
         }
-        if(pageSize != null || pageSize <= 0){
+        if (pageSize != null || pageSize <= 0) {
             pageSize = 40;
         }
         Integer startIn = (pageNo - 1) * pageSize;  //分页查询开始索引  相当于 sql语句中limit 0,10 中的0(从第几个数据开始查询)
@@ -169,12 +172,12 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             query.addFilterQuery(filterQuery);
         }
         //根据规格过滤
-        if(specMap != null){
+        if (specMap != null) {
             for (Map.Entry<String, String> entry : specMap.entrySet()) {
                 //创建过滤查询对象
                 FilterQuery filterQuery = new SimpleFilterQuery();
                 //创建过滤条件对象
-                Criteria item_spec = new Criteria("item_spec_"+entry.getKey()).is(entry.getValue());
+                Criteria item_spec = new Criteria("item_spec_" + entry.getKey()).is(entry.getValue());
                 //将条件对象放入过滤对象中
                 filterQuery.addCriteria(item_spec);
                 //将过滤对象放入查询对象中
@@ -182,11 +185,11 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
         }
         //根据价格区间过滤
-        if(priceStr != null && !"".equals(priceStr)){
+        if (priceStr != null && !"".equals(priceStr)) {
             String[] split = priceStr.split("-");
             String leftPriceStr = split[0];
             String rightPriceStr = split[1];
-            if("0".equals(leftPriceStr)){
+            if ("0".equals(leftPriceStr)) {
                 //创建过滤查询对象
                 FilterQuery filterQuery = new SimpleFilterQuery();
                 //创建过滤条件对象
@@ -195,7 +198,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                 filterQuery.addCriteria(item_price);
                 //将过滤对象放入查询对象中
                 query.addFilterQuery(filterQuery);
-            }else if("*".equals(rightPriceStr)){
+            } else if ("*".equals(rightPriceStr)) {
                 //创建过滤查询对象
                 FilterQuery filterQuery = new SimpleFilterQuery();
                 //创建过滤条件对象
@@ -204,7 +207,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                 filterQuery.addCriteria(item_price);
                 //将过滤对象放入查询对象中
                 query.addFilterQuery(filterQuery);
-            }else if(!"0".equals(leftPriceStr) && !"*".equals(rightPriceStr)){
+            } else if (!"0".equals(leftPriceStr) && !"*".equals(rightPriceStr)) {
                 //创建过滤查询对象
                 FilterQuery filterQuery = new SimpleFilterQuery();
                 //创建过滤条件对象
@@ -218,12 +221,12 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
         }
         //根据排序字段进行排序
-        if(sortField != null && !"".equals(sortField)){
-            if("ASC".equals(sortType)){
+        if (sortField != null && !"".equals(sortField)) {
+            if ("ASC".equals(sortType)) {
                 Sort sort = new Sort(Sort.Direction.ASC, "item_" + sortField);
                 query.addSort(sort);
             }
-            if("DESC".equals(sortType)){
+            if ("DESC".equals(sortType)) {
                 Sort sort = new Sort(Sort.Direction.DESC, "item_" + sortField);
                 query.addSort(sort);
             }
@@ -233,7 +236,6 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //is(String keywords) 调用该方法后是通过solr配置的分词器将关键字切分词,然后一个一个查询
         Criteria criteria = new Criteria("item_keywords").is(keywords);
         query.addCriteria(criteria);
-
 
 
         HighlightPage<Item> itemPages = solrTemplate.queryForHighlightPage(query, Item.class);
@@ -357,4 +359,5 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 //        map.put("totalPages",itemPages.getTotalPages());
 //        return map;
 //    }
+    //wqewqeqweqweqwasdasdasdasdasdsaasdasdasdsaasdasdas
 }

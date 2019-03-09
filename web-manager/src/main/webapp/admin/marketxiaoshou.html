@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>销售折线图</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../js/markst/echarts.min.js"></script>
+    <!--引入angularjs核心包-->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/service/orderItemService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/orderItemController.js"></script>
+</head>
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">销售折线图</h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+
+            <div class="box-tools pull-left">
+                <div class="has-feedback">
+                    <h4>不同品牌下的销售量</h4>
+                </div>
+                <div id="view02" style="width:500px; height: 400px;"></div>
+            </div>
+            <script>
+                /**/
+                /* <%--1.获取目标对象引用--%>*/
+                var view02 = document.getElementById("view02");
+                /*<%--2.echarts初始化--%>*/
+                var myChart2 = echarts.init(view02);
+                /*  <%--3.设置配置项和数据--%>*/
+                option2 = {
+                    xAxis: {
+                        type: 'category',
+                        data: []
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: [],
+                        type: 'line'
+                    }]
+                };
+                /*<%--4.显示图表:建立echarts和配置项与数据的关系 --%>*/
+                myChart2.setOption(option2);
+                // 异步加载数据
+                var url = "../market/showSalesQuantity.do";
+                $.get(url).done(function (data) {
+                    // 填入数据
+                    myChart2.setOption({
+                        xAxis: {
+                            data: data.brandNameList
+                        },
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            name: '销售量',
+                            data: data.totalNumList
+                        }]
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+
+</html>

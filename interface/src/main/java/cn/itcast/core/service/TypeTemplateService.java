@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 public interface TypeTemplateService {
     //查询所有
     List<TypeTemplate> queryAll();
@@ -38,4 +37,7 @@ public interface TypeTemplateService {
 
     //根据模板id查询规格选项集合
     List<Map> findSpecListByTypeId(Long templateId);
+
+    //审批
+    void updateStatus(Long[] ids, String status);
 }

@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>品牌管理</title>
-		<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
-		<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
-		<link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
-		<link rel="stylesheet" href="../css/style.css">
-		<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
-		<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
 
 		<!-- 引入angular的js -->
 		<script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
@@ -50,9 +36,9 @@
                      $("#dataList").append(str);
                      */
 					});
-						
+
 						/*
-						
+
     					 var str = " <tbody>\n" +
             "\t\t\t                          <tr ng-repeat=\"entity in list\">\n" +
             "\t\t\t                              <td><input  type=\"checkbox\" ng-click=\"updateSelection($event,entity.id)\"></td>\t\t\t                              \n" +
@@ -117,15 +103,15 @@
 					</thead>
 					<!-- <tbody>
 			                          <tr ng-repeat="entity in list">
-			                              <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>			                              
+			                              <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
 				                          <td>{{entity.id}}</td>
-									      <td>{{entity.name}}</td>									     
-		                                  <td>{{entity.firstChar}}</td>		                                 
-		                                  <td class="text-center">                                           
-		                                 	  <button type="button" class="btn bg-olive btn-xs" ng-click="findById(entity.id)" data-toggle="modal" data-target="#editModal"  >修改</button>                                           
+									      <td>{{entity.name}}</td>
+		                                  <td>{{entity.firstChar}}</td>
+		                                  <td class="text-center">
+		                                 	  <button type="button" class="btn bg-olive btn-xs" ng-click="findById(entity.id)" data-toggle="modal" data-target="#editModal"  >修改</button>
 		                                  </td>
 			                          </tr>
-									  
+
 			                      </tbody>-->
 				</table>
 				<!--数据列表/-->

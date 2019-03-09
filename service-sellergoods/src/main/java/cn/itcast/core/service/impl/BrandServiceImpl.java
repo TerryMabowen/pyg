@@ -5,7 +5,9 @@ import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
 import cn.itcast.core.service.BrandService;
+import cn.itcast.core.util.Constants;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Constant;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,7 @@ public class BrandServiceImpl implements BrandService {
     //新增品牌
     @Override
     public void add(Brand brand) {
+        brand.setStat(Constants.YI_SHEN_HE);
         brandDao.insertSelective(brand);
     }
     //查询一条
@@ -65,6 +68,12 @@ public class BrandServiceImpl implements BrandService {
             if(brand.getFirstChar() != null && brand.getFirstChar().length()>0){
                 criteria.andFirstCharEqualTo(brand.getFirstChar());
             }
+            if(brand.getStat()!=null){
+                  criteria.andStatEqualTo(brand.getStat());
+            }
+            if (brand.getStat()!=null && !"".equals(brand.getStat())){
+                criteria.andStatEqualTo(brand.getStat());
+            }
         }
         PageHelper.startPage(page, rows);
         Page<Brand> brandPage = (Page<Brand>) brandDao.selectByExample(query);
@@ -76,4 +85,29 @@ public class BrandServiceImpl implements BrandService {
         List<Map> maps = brandDao.selectOptionList();
         return maps;
     }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+       if(ids.length>0&&ids!=null){
+           for (Long id : ids) {
+               Brand brand = new Brand();
+               brand.setId(id);
+               brand.setStat(status);
+               brandDao.updateByPrimaryKeySelective(brand);
+           }
+       }
+    }
+
+
+
+    //品牌申请  修改状态
+    @Override
+    public void updateStat(Long id) {
+        Brand brand = new Brand();
+        brand.setId(id);
+        brand.setStat("1");
+        brandDao.updateByPrimaryKeySelective(brand);
+    }
+
+
 }
