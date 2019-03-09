@@ -23,4 +23,6 @@ public interface Constants {
     public final static String YI_SHEN_HE = "2";
     //驳回状态码
     public final static String YI_BO_HUI = "3";
+    //设置Redis中用户已登录后收藏集合的主键
+    public final static String REDIS_COLLECTIONLIST = "login_collectionList";
 }
