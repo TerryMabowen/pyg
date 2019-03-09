@@ -43,7 +43,7 @@ app.controller('brandController',function ($scope,brandService,$controller) {
                 }
             }
         )
-    }
+    };
 
     //根据主键查询一条(修改时回显)
     $scope.findOne=function (id) {

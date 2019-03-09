@@ -26,10 +26,10 @@ app.service('orderService',function($http){
 		return $http.get('../order/delete.do?ids='+ids);
 	}
 	//搜索
-	this.search=function(page,rows,searchEntity){
-		return $http.post('../order/search.do?page='+page+"&rows="+rows,searchEntity);
-	}
-	this.findOrdersByUsername=function (status) {
-		return $http.get('../order/findOrdersByUsername.do?status='+status);
+	this.search=function (page,rows) {
+		return $http.get('../order/search.do?page='+page+'&rows='+rows);
+    }
+    this.findOrderList=function (status) {
+		return $http.get('../order/findOrderList.do?status='+status);
     }
 });

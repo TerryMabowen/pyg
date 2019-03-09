@@ -1,7 +1,15 @@
  //控制层 
-app.controller('orderController' ,function($scope,$controller,orderService){
-    //继承baseController
-    $controller('baseController',{$scope:$scope});
+app.controller('orderController' ,function($scope,$controller,loginService,orderService){
+
+    $scope.showName=function(){
+        loginService.showName().success(
+            function(response){
+                $scope.loginName=response.loginName;
+            }
+        );
+    }
+    // 显示状态
+    $scope.stat = ["","待付款","已付款","待发货","已发货","交易成功","交易关闭","待评价"];
     //查询所有并展示
     /* $scope.findAll=function() {
          orderService.findAll().success(
@@ -70,6 +78,14 @@ app.controller('orderController' ,function($scope,$controller,orderService){
         )
     }
 
+    $scope.findOrderList=function (status) {
+        orderService.findOrderList(status).success(
+            function (response) {
+               $scope.orderDescList = response;
+            }
+        )
+    }
+
     //条件查询带分页
     //定义一个查询条件对象
     $scope.searchEntity={};
@@ -82,9 +98,4 @@ app.controller('orderController' ,function($scope,$controller,orderService){
             }
         )
     }
-	
-    
-	
-	
-	
 });	

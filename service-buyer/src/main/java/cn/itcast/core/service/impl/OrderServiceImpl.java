@@ -23,9 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -170,36 +168,48 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    @Override
-    public OrderDesc findOrderDescByUsername(String username,String status){
-        OrderDesc orderDesc = new OrderDesc();
+   @Override
+    public List<OrderDesc> findOrderDescByUsername(String userName,String status){
+        List<OrderDesc> orderDescList = new ArrayList<>();
+       OrderDesc orderDesc = new OrderDesc();
+       OrderQuery orderQuery = new OrderQuery();
+       OrderQuery.Criteria criteria = orderQuery.createCriteria();
+       criteria.andUserIdEqualTo(userName);
+       if(status != null && !"".equals(status) && !"undefined".equals(status)){
+           criteria.andStatusEqualTo(status);
+       }
+       List<Order> orderList = orderDao.selectByExample(orderQuery);
+       if(orderList != null && orderList.size() > 0){
+           orderDesc.setOrderList(orderList);
+           for (Order order : orderList) {
+               Long orderId = order.getOrderId();
+               orderDesc.setOrderId(orderId);
+               orderDesc.setOrderIdStr(orderId+"");
+               orderDesc.setPaymentType(order.getPaymentType());
+               orderDesc.setCreateTime(order.getCreateTime());
+               orderDesc.setUpdateTime(order.getUpdateTime());
+               orderDesc.setPostFee(order.getPostFee());
+               orderDesc.setStatus(order.getStatus());
+               orderDesc.setBuyerNick(order.getBuyerNick());
+               orderDesc.setReceiverAreaName(order.getReceiverAreaName());
+               orderDesc.setReceiverMobile(order.getReceiverMobile());
+               orderDesc.setReceiver(order.getReceiver());
 
-        OrderQuery orderQuery = new OrderQuery();
-        OrderQuery.Criteria orderQueryCriteria = orderQuery.createCriteria();
-        orderQueryCriteria.andUserIdEqualTo(username);
-        if(status != null && !"".equals(status)) {
-            orderQueryCriteria.andStatusEqualTo(status);
-        }
-        List<Order> orderList = orderDao.selectByExample(orderQuery);
-
-        if(orderList != null){
-            orderDesc.setOrders(orderList);
-            for (Order order : orderList) {
-                String sellerId = order.getSellerId();
-                Seller seller = sellerDao.selectByPrimaryKey(sellerId);
-                String sellerName = seller.getName();
-                orderDesc.setSellerName(sellerName);
-
-                Long orderId = order.getOrderId();
-                OrderItemQuery orderItemQuery = new OrderItemQuery();
-                OrderItemQuery.Criteria criteria = orderItemQuery.createCriteria();
-                criteria.andOrderIdEqualTo(orderId);
-                List<OrderItem> orderItemList = orderItemDao.selectByExample(orderItemQuery);
-                if(orderItemList != null) {
-                    orderDesc.setOrderItems(orderItemList);
-                }
-            }
-        }
-        return orderDesc;
+               OrderItemQuery orderItemQuery = new OrderItemQuery();
+               OrderItemQuery.Criteria criteria1 = orderItemQuery.createCriteria();
+               criteria1.andOrderIdEqualTo(orderId);
+               List<OrderItem> orderItemList = orderItemDao.selectByExample(orderItemQuery);
+               if(orderItemList != null){
+                   orderDesc.setOrderItemList(orderItemList);
+               }
+               String sellerId = order.getSellerId();
+               Seller seller = sellerDao.selectByPrimaryKey(sellerId);
+               orderDesc.setSellerName(seller.getName());
+           }
+           orderDescList.add(orderDesc);
+       }
+       return orderDescList;
     }
+
+
 }

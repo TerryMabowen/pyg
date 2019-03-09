@@ -15,12 +15,13 @@
 	<script type="text/javascript" src="js/base.js"></script>
 	<script type="text/javascript" src="js/service/loginService.js"></script>
 	<script type="text/javascript" src="js/service/orderService.js"></script>
-	<script type="text/javascript" src="js/controller/indexController.js"></script>
-    
+	<script type="text/javascript" src="js/controller/orderController.js"></script>
+
 </head>
 
-<body  ng-app="pinyougou" ng-controller="indexController" ng-init="showName();findOrdersByUsername()">
+<body  ng-app="pinyougou" ng-controller="orderController" ng-init="showName();findOrderList('')">
     <!-- 头部栏位 -->
+
     <!--页面顶部-->
 <div id="nav-bottom">
 	<!--顶部-->
@@ -149,6 +150,8 @@ $(function(){
 <script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="js/widget/nav.js"></script>
+
+
 </body>
     <!--header-->
     <div id="account">
@@ -208,9 +211,10 @@ $(function(){
                                 </tr>
                             </table>
                         </div>
-                        <div class="order-detail">
-                            <div class="orders">
-                                <div class="choose-order">
+
+                        <div class="order-detail" ng-repeat="orderDesc in orderDescList" >
+                            <div class="orders"  ng-repeat="order in orderDesc.orderList">
+                               <!--<div class="choose-order">
                                     <div class="sui-pagination pagination-large top-pages">
                                         <ul>
                                             <li class="prev disabled"><a href="#">上一页</a></li>
@@ -218,20 +222,20 @@ $(function(){
                                             <li class="next"><a href="#">下一页</a></li>
                                         </ul>
                                     </div>
-                                </div>
+                                </div>-->
 
 								<!--order1-->
-                                <div class="choose-title" ng-repeat="order in orders">
-                                    <label data-toggle="checkbox" class="checkbox-pretty ">
-                                           <input type="checkbox" checked="checked"><span>{{order.updateTime}}　订单编号：{{order.orderId}}  店铺：{{sellerName}} <a>和我联系</a></span>
+                                <div class="choose-title" >
+                                    <label data-toggle="checkbox" class="checkbox-pretty " >
+                                           <input type="checkbox" checked="checked" ><span>{{order.createTime}}　订单编号：{{order.orderIdStr}}  店铺：{{orderDesc.sellerName}} <a>和我联系</a></span>
                                      </label>
-									  <a class="sui-btn btn-info share-btn">分享</a>
-                                </div>
-                                <table class="sui-table table-bordered order-datatable">
-                                    <tbody>
-                                        <tr ng-repeat="orderItem in orderItems">
+									  <a class="sui-btn btn-info share-btn" >分享</a>
+
+                                <table class="sui-table table-bordered order-datatable" >
+                                    <tbody >
+                                        <tr  ng-repeat="orderItem in orderDesc.orderItemList">
                                             <td width="35%">
-                                                <div class="typographic"><img src="{{orderItem.picPath}}" />
+                                                <div class="typographic"><img width="100px" height="100px" src="{{orderItem.picPath}}" />
                                                     <a href="#" class="block-text">{{orderItem.title}}</a>
                                                     <span class="guige">规格：温泉喷雾150ml</span>
                                                 </div>
@@ -249,45 +253,45 @@ $(function(){
                                             <td width="10%" class="center" >
                                                 <ul class="unstyled">
                                                     <li>¥{{orderItem.totalFee}}</li>
-                                                    <li>（含运费：￥0.00）</li>
+                                                    <li>（含运费：￥{{order.postFee}}）</li>
                                                 </ul>
                                             </td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li>status[order.status]</li>
+                                                    <li>{{stat[order.status]}}</li>
                                                     <li><a href="orderDetail.html" class="btn">订单详情 </a></li>
                                                 </ul>
                                             </td>
-                                            <td width="10%" class="center">
+                                            <td width="10%" class="center" >
                                                 <ul class="unstyled">
-													<li><a href="#" class="sui-btn btn-info">立即付款</a></li>
+													<li><a href="#" class="sui-btn btn-info" >立即付款</a></li>
                                                     <li>取消订单</li>
-                                                    
                                                 </ul>
                                             </td>
+
                                         </tr>
-                                        
 
                                     </tbody>
                                 </table>
-
+								</div>
                             </div>
-                            <div class="choose-order">
-                                <div class="sui-pagination pagination-large top-pages">
-                                    <ul>
-                                        <li class="prev disabled"><a href="#">«上一页</a></li>
-                                        <li class="active"><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li class="dotted"><span>...</span></li>
-                                        <li class="next"><a href="#">下一页»</a></li>
-                                    </ul>
-                                    <div><span>共10页&nbsp;</span><span>
+							<!--<div class="choose-order">
+
+								<div class="sui-pagination pagination-large top-pages">
+									<ul>
+										<li class="prev disabled"><a href="#">«上一页</a></li>
+										<li class="active"><a href="#">1</a></li>
+										<li><a href="#">2</a></li>
+										<li><a href="#">3</a></li>
+										<li class="dotted"><span>...</span></li>
+										<li class="next"><a href="#">下一页»</a></li>
+									</ul>
+									<div><span>共10页&nbsp;</span><span>
                                             到
                                             <input type="text" class="page-num"><button class="page-confirm" onclick="alert(1)">确定</button>
                                             页</span></div>
-                                </div>
-                            </div>
+								</div>
+							</div>-->
 
                             <div class="clearfix"></div>
                         </div>
