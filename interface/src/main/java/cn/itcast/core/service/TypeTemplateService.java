@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-@Repository
+
 public interface TypeTemplateService {
     //查询所有
     List<TypeTemplate> queryAll();

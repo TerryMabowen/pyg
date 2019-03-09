@@ -2,11 +2,10 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.good.Brand;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-@Repository
+
 public interface BrandService {
     //查询所有
     List<Brand> queryAll();

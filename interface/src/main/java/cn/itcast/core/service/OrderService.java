@@ -3,7 +3,7 @@ package cn.itcast.core.service;
 import cn.itcast.core.pojo.order.Order;
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 public interface OrderService {
     //提交订单
      void add(Order order);

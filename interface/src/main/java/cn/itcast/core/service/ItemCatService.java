@@ -1,12 +1,9 @@
 package cn.itcast.core.service;
 
-import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.item.ItemCat;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
-@Repository
+
 public interface ItemCatService {
     //查询所有
     List<ItemCat> queryAll();

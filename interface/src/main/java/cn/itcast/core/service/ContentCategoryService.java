@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface ContentCategoryService {
     //查询所有
     List<ContentCategory> queryAll();

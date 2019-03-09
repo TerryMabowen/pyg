@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface GoodsService {
     //添加商品
     void add(GoodsEntity goodsEntity);
