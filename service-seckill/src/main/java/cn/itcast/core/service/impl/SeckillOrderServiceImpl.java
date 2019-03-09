@@ -2,8 +2,11 @@ package cn.itcast.core.service.impl;
 
 import cn.itcast.core.dao.seckill.SeckillGoodsDao;
 import cn.itcast.core.dao.seckill.SeckillOrderDao;
+import cn.itcast.core.dao.seller.SellerDao;
 import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.pojo.seckill.SeckillOrder;
+import cn.itcast.core.pojo.seckill.SeckillOrderQuery;
+import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.service.SeckillOrderService;
 import cn.itcast.core.util.IdWorker;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -24,6 +27,8 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     private RedisTemplate redisTemplate;
     @Autowired
     private IdWorker idWorker;
+    @Autowired
+    private SellerDao sellerDao;
 
     /**
      * 点击立即抢购,提交秒杀订单,预存到redis中
@@ -108,6 +113,41 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
                 seckillGoods.setStockCount(seckillGoods.getStockCount() + 1);
                 redisTemplate.boundHashOps("seckillGoods").put(seckillOrder.getSeckillId(), seckillGoods);//存入缓存
             }
+        }
+    }
+
+    @Override
+    public List<SeckillOrder> findSeckillOrderList(String username) {
+        //从数据库查已支付订单
+        SeckillOrderQuery query = new SeckillOrderQuery();
+        SeckillOrderQuery.Criteria criteria = query.createCriteria();
+        criteria.andUserIdEqualTo(username);
+        criteria.andStatusEqualTo("1");
+        List<SeckillOrder> listFromDb = seckillOrderDao.selectByExample(query);
+
+        if (listFromDb != null) {
+            for (SeckillOrder seckillOrder : listFromDb) {
+                //查询订单对应的商品,保存到订单中
+                SeckillGoods seckillGoods = seckillGoodsDao.selectByPrimaryKey(seckillOrder.getSeckillId());
+                seckillOrder.setSeckillGoods(seckillGoods);
+                Seller seller = sellerDao.selectByPrimaryKey(seckillOrder.getSellerId());
+                seckillOrder.setSellerNickName(seller.getNickName());
+            }
+        }
+        return listFromDb;
+    }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        //修改订单表状态
+        SeckillOrder seckillOrder = seckillOrderDao.selectByPrimaryKey(orderId);
+        seckillOrder.setStatus("6");
+        seckillOrderDao.updateByPrimaryKeySelective(seckillOrder);
+        //恢复缓存中对应的商品库存
+        SeckillGoods seckillGoods = (SeckillGoods) redisTemplate.boundHashOps("seckillGoods").get(seckillOrder.getSeckillId());
+        if (seckillGoods != null) {
+            seckillGoods.setStockCount(seckillGoods.getStockCount() + 1);
+            redisTemplate.boundHashOps("seckillGoods").put(seckillGoods.getId(), seckillGoods);
         }
     }
 }

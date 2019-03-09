@@ -12,4 +12,8 @@ public interface SeckillOrderService {
 
     public void deleteOrderFromRedis(String userId, Long orderId);
 
+    public List<SeckillOrder> findSeckillOrderList(String username);
+
+    public void cancelOrder(Long orderId);
+
 }

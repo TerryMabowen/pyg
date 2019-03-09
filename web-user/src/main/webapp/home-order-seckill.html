@@ -13,12 +13,12 @@
 
     <script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
     <script type="text/javascript" src="js/base.js"></script>
-    <script type="text/javascript" src="js/service/loginService.js"></script>
-    <script type="text/javascript" src="js/controller/indexController.js"></script>
+    <script type="text/javascript" src="js/service/seckillService.js"></script>
+    <script type="text/javascript" src="js/controller/seckillController.js"></script>
 
 </head>
 
-<body ng-app="pinyougou" ng-controller="indexController" ng-init="showName()">
+<body ng-app="pinyougou" ng-controller="seckillController" ng-init="findSeckillOrderList()">
 <!-- 头部栏位 -->
 <!--页面顶部-->
 <div id="nav-bottom">
@@ -169,12 +169,12 @@
                 <div class="list-items">
                     <dl>
                         <dt><i>·</i> 订单中心</dt>
-                        <dd><a href="home-index.html" class="list-active">我的订单</a></dd>
+                        <dd><a href="home-index.html">我的订单</a></dd>
                         <dd><a href="home-order-pay.html">待付款</a></dd>
                         <dd><a href="home-order-send.html">待发货</a></dd>
                         <dd><a href="home-order-receive.html">待收货</a></dd>
                         <dd><a href="home-order-evaluate.html">待评价</a></dd>
-                        <dd><a href="home-order-seckill.html">我的秒杀</a></dd>
+                        <dd><a href="home-index.html" class="list-active">我的秒杀</a></dd>
                     </dl>
                     <dl>
                         <dt><i>·</i> 我的中心</dt>
@@ -222,10 +222,12 @@
                                 </div>
                             </div>
 
+                            <!--{{list}}-->
                             <!--order1-->
+                            <div ng-repeat="entity in list">
                             <div class="choose-title">
                                 <label data-toggle="checkbox" class="checkbox-pretty ">
-                                    <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
+                                    <input type="checkbox" checked="checked"><span>{{entity.createTime}}　订单编号：{{entity.id}}  店铺：{{entity.sellerNickName}} <a>和我联系</a></span>
                                 </label>
                                 <a class="sui-btn btn-info share-btn">分享</a>
                             </div>
@@ -233,15 +235,15 @@
                                 <tbody>
                                 <tr>
                                     <td width="35%">
-                                        <div class="typographic"><img src="img/goods.png"/>
-                                            <a href="#" class="block-text">包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</a>
-                                            <span class="guige">规格：温泉喷雾150ml</span>
+                                        <div class="typographic"><img src="{{entity.seckillGoods.smallPic}}"/>
+                                            <a href="#" class="block-text">{{entity.seckillGoods.title}}</a>
+                                            <!--<span class="guige">规格：温泉喷雾150ml</span>-->
                                         </div>
                                     </td>
                                     <td width="5%" class="center">
                                         <ul class="unstyled">
-                                            <li class="o-price">¥599.00</li>
-                                            <li>¥299.00</li>
+                                            <li class="o-price">¥{{entity.seckillGoods.price}}</li>
+                                            <li>¥{{entity.seckillGoods.costPrice}}</li>
                                         </ul>
                                     </td>
                                     <td width="5%" class="center">1</td>
@@ -250,20 +252,20 @@
                                     </td>
                                     <td width="10%" class="center">
                                         <ul class="unstyled">
-                                            <li>¥299.00</li>
+                                            <li>¥{{entity.seckillGoods.costPrice}}</li>
                                             <li>（含运费：￥0.00）</li>
                                         </ul>
                                     </td>
                                     <td width="10%" class="center">
                                         <ul class="unstyled">
-                                            <li>等待卖家付款</li>
+                                            <li>已付款</li>
                                             <li><a href="orderDetail.html" class="btn">订单详情 </a></li>
                                         </ul>
                                     </td>
                                     <td width="10%" class="center">
                                         <ul class="unstyled">
-                                            <li><a href="#" class="sui-btn btn-info">立即付款</a></li>
-                                            <li>取消订单</li>
+                                            <!--<li><a href="#" class="sui-btn btn-info">立即付款</a></li>-->
+                                            <li><div ng-click="cancelOrder(entity.id)" class="sui-btn btn-info">取消订单</div></li>
 
                                         </ul>
                                     </td>
@@ -272,8 +274,9 @@
 
                                 </tbody>
                             </table>
+                            </div>
                             <!--order2-->
-                            <div class="choose-title">
+                            <!--<div class="choose-title">
                                 <label data-toggle="checkbox" class="checkbox-pretty ">
                                     <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
                                 </label>
@@ -345,10 +348,10 @@
                                 </tr>
 
                                 </tbody>
-                            </table>
+                            </table>-->
 
                             <!--order3-->
-                            <div class="choose-title">
+                            <!--<div class="choose-title">
                                 <label data-toggle="checkbox" class="checkbox-pretty ">
                                     <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
                                 </label>
@@ -397,7 +400,7 @@
 
 
                                 </tbody>
-                            </table>
+                            </table>-->
 
 
                         </div>
