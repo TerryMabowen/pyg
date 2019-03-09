@@ -50,6 +50,7 @@ public class UploadServiceImpl implements UploadService {
             for (String[] brands : excelList) {
                 brand.setName(brands[1]);
                 brand.setFirstChar(brands[2]);
+                brand.setStat("2");
                 brandDao.insert(brand);
             }
         }
@@ -62,6 +63,7 @@ public class UploadServiceImpl implements UploadService {
             SpecificationOption spec_option = new SpecificationOption();
             for (String[] specs : excelList) {
                 spec.setSpecName(specs[1]);
+                spec.setStat("2");
                 specDao.insert(spec);
                 int i = 3;
                 int j = 1;
@@ -105,6 +107,7 @@ public class UploadServiceImpl implements UploadService {
                         }
                     }
                     template.setSpecIds(jsonStr);
+                    template.setStat("1");
                 }
                 if (types[3] != null) {
                     String str = types[3].toString();
@@ -165,6 +168,7 @@ public class UploadServiceImpl implements UploadService {
                 }
                 itemCat.setName(cats[2]);
                 String typeName = cats[3];
+                itemCat.setStat("2");
                 if (typeName != null) {
                     TypeTemplateQuery query = new TypeTemplateQuery();
                     TypeTemplateQuery.Criteria criteria = query.createCriteria();

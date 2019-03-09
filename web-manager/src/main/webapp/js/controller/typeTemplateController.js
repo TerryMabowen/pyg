@@ -149,4 +149,16 @@ app.controller('typeTemplateController',function ($scope,typeTemplateService,$co
             }
         });
     }
+    //上传excel表格解析
+    $scope.uploadExcel = function () {
+        // 调用uploadService的方法完成文件的上传
+        typeTemplateService.uploadExcel().success(function (response) {
+            if (response.success == true) {
+                alert(response.message)
+                $scope.reloadList();//重新加载
+            } else {
+                alert(response.message);
+            }
+        });
+    }
 })
