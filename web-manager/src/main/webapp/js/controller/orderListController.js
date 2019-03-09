@@ -24,8 +24,8 @@ app.controller('orderListController',function ($scope,orderListService,$controll
     // }
     //分页查询
     $scope.getOrderList=function(sellerId){
-        orderListService.getOrderList(sellerId).success(
-                location.href = "http://localhost:8083/admin/orderlist2.html#?sellerId=" + $scope.sellerId
-        )
+        // orderListService.getOrderList(sellerId).success(
+                location.href = "http://localhost:8083/admin/orderlist2.html#?sellerId=" + $scope.sellerId;
+       // )
     }
 })
